@@ -1,0 +1,63 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
+import time
+import pandas as pd
+
+def scrape_environmental_jobs(url, search_term="ecologist"):
+    options = webdriver.ChromeOptions()
+    # options.add_argument("--headless")  # Optional: For headless browsing (comment this out for interactive inspection)
+
+    try:
+        driver = webdriver.Chrome(options=options)
+        driver.get(url)
+
+        # 1. Search (if needed)
+        search_bar = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "keyword"))  # Example ID, inspect the website
+        )
+        search_bar.send_keys(search_term)
+        search_button = driver.find_element(By.ID, "keyword-search-form")  # Example ID, inspect the website
+        search_button.click()
+
+        # 2. Wait for job listings to load (CRITICAL)
+        job_listings_loaded = WebDriverWait(driver, 20).until(  # Increased timeout
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".job-item"))  # Example CSS selector, replace with correct selector
+        )
+
+        # *** INTERACTIVE INSPECTION ***
+        # The browser window will now remain open.
+        # You can inspect the HTML, test selectors in the console, etc.
+        input("Press Enter to continue scraping...")  # Pause execution
+
+        # 3. Now that you've inspected, continue with scraping:
+        all_jobs = []
+        while True:
+            soup = BeautifulSoup(driver.page_source, "html.parser")  # Parse after inspection
+            # ... (rest of your scraping logic as before) ...
+
+            try:
+                next_page_button = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Next')]"))  # Example XPath
+                )
+                next_page_button.click()
+                WebDriverWait(driver, 20).until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, ".job-item"))  # Example CSS selector
+                )
+
+            except:
+                break
+
+        return all_jobs
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return []
+
+    finally:
+        # driver.quit()  # Keep the browser open even in case of an error for debugging
+        pass
+
+# ... (rest of the code as before)
