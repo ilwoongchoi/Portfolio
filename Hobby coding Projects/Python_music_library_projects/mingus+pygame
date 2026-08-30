@@ -1,0 +1,47 @@
+import random
+import pygame
+
+
+from mingus.containers import Note, Bar, Track
+from mingus.midi import midi_file_out
+
+
+
+# Settings
+scale = ["C", "D", "E", "F", "G", "A", "B"]  # C major
+num_bars = 20
+
+# Create a track
+track = Track()
+
+for _ in range(num_bars):
+    bar = Bar("C", (4,4))  # C major, 4/4 time
+
+    # Fill each bar with 4 quarter notes (simple example)
+    for _ in range(4):
+        note_name = random.choice(scale)
+        octave = random.choice([4, 5])
+        note = Note(note_name, octave)
+        bar.place_notes(note, 4)  # quarter note
+
+    track.add_bar(bar)
+
+# Save to MIDI
+midi_file_out.write_Track("random_melody.mid", track)
+
+print("Generated random melody saved as random_melody.mid")
+
+
+# Initialize pygame mixer
+pygame.init()
+pygame.mixer.init()
+
+# Load MIDI file
+pygame.mixer.music.load("random_melody.mid")
+
+# Play
+pygame.mixer.music.play()
+
+# Wait until it finishes
+while pygame.mixer.music.get_busy():
+    pygame.time.Clock().tick(10)
