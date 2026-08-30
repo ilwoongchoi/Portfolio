@@ -1,0 +1,62 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# Define gravitational constant (km^3/kg/s^2)
+G = 6.67430e-20  
+M_sun = 1.989e30  # kg
+M_earth = 5.972e24  # kg
+
+# Define initial positions (km) and velocities (km/s)
+r_sun = np.array([0, 0, 0])
+r_earth = np.array([1.496e8, 0, 0])  # 1 AU
+v_earth = np.array([0, 29.78, 0])  # Earth's velocity
+
+# Define asteroid 2024 YR4 initial conditions based on orbital elements
+a = 2.66 * 1.496e8  # Semi-major axis in km
+e = 0.615  # Eccentricity
+inc = np.radians(3.41)  # Inclination in radians
+raan = np.radians(80.0)  # Longitude of Ascending Node in radians
+argp = np.radians(45.0)  # Argument of Periapsis in radians
+nu = np.radians(0.0)  # True Anomaly in radians
+
+# Compute initial position and velocity in orbital plane
+r_periapsis = a * (1 - e)
+r_asteroid = np.array([r_periapsis * np.cos(nu), r_periapsis * np.sin(nu), 0])
+
+v_mag = np.sqrt(G * M_sun * ((2 / np.linalg.norm(r_asteroid)) - (1 / a)))
+v_asteroid = np.array([-v_mag * np.sin(nu), v_mag * (e + np.cos(nu)), 0])
+
+# Define function for N-body acceleration
+def acceleration(t, y):
+    r_earth, v_earth, r_asteroid, v_asteroid = np.split(y, 4)
+    
+    r_se = np.linalg.norm(r_earth - r_sun)
+    r_sa = np.linalg.norm(r_asteroid - r_sun)
+
+    a_earth = -G * M_sun * r_earth / r_se**3
+    a_asteroid = -G * M_sun * r_asteroid / r_sa**3
+    
+    return np.concatenate([v_earth, a_earth, v_asteroid, a_asteroid])
+
+# Solve system over 365 days
+y0 = np.concatenate([r_earth, v_earth, r_asteroid, v_asteroid])
+t_span = (0, 365 * 24 * 3600)  # 1 year
+solution = solve_ivp(acceleration, t_span, y0, method="RK45", t_eval=np.linspace(0, t_span[1], 500))
+
+# Extract positions
+r_earth_traj = solution.y[:3, :]
+r_asteroid_traj = solution.y[6:9, :]
+
+# Plot results
+plt.figure(figsize=(8, 8))
+plt.plot(r_earth_traj[0], r_earth_traj[1], label="Earth")
+plt.plot(r_asteroid_traj[0], r_asteroid_traj[1], label="Asteroid 2024 YR4", linestyle="dashed")
+plt.scatter(0, 0, color="orange", label="Sun")
+plt.xlabel("X (km)")
+plt.ylabel("Y (km)")
+plt.legend()
+plt.title("N-Body Simulation of Earth & Asteroid 2024 YR4")
+plt.grid()
+plt.show()
+
