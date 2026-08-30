@@ -1,0 +1,69 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
+import pandas as pd
+
+def scrape_environmental_jobs(url, search_term="ecologist"):
+    options = webdriver.ChromeOptions()
+    # options.add_argument("--headless")  # Optional: For headless browsing
+
+    try:
+        driver = webdriver.Chrome(options=options)
+        driver.get(url)
+
+        # 1. Search (if needed)
+        search_bar = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "keyword"))  # Replace with correct ID
+        )
+        search_bar.send_keys(search_term)
+        search_button = driver.find_element(By.ID, "keyword_search_form")  # Replace with correct ID
+        search_button.click()
+
+        # 2. Wait for job listings to load (CRITICAL)
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".col-span-4 lg:col-span-3 lg:pr-6 px-3 lg:px-4 ul"))  # Replace with correct selector for a job listing item
+        )
+
+        soup = BeautifulSoup(driver.page_source, "html.parser")
+        job_listings = soup.find_all("div", class_="lg:ml-[135px]")  # Replace with correct selector
+
+        all_jobs = []
+
+        for job_listing in job_listings:
+            title = job_listing.find("h3", class_="text-gray-800").text.strip() if job_listing.find("h3", class_="text-gray-800") else "N/A"
+            company = job_listing.find("div", class_="text-base.font-medium").text.strip() if job_listing.find("div", class_="text-base.font-medium") else "N/A"
+            location = job_listing.find("div", class_="lg:inline-block.mr-3").text.strip() if job_listing.find("div", class_="lg:inline-block.mr-3") else "N/A"
+            salary = job_listing.find("div", class_="lg:inline-block.mr-3").text.strip() if job_listing.find("div", class_="lg:inline-block.mr-3") else "N/A"
+            link = job_listing.find("a", class_="group.block.card")['href'] if job_listing.find("a", class_="group.block.card") else "N/A"
+
+            all_jobs.append({
+                "title": title,
+                "company": company,
+                "location": location,
+                "salary": salary,
+                "link": link
+            })
+
+        return all_jobs
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return []
+
+    finally:
+        if 'driver' in locals():
+            driver.quit()
+
+if __name__ == "__main__":
+    base_url = "https://www.environmentaljobs.co.uk/"  # Or the specific URL with the search already performed
+    jobs = scrape_environmental_jobs(base_url)
+
+    if jobs:
+        df = pd.DataFrame(jobs)
+        print(df)  # Print the DataFrame to the console
+        df.to_csv("environmental_jobs.csv", index=False, encoding="utf-8")
+        print("Scraping complete. Results saved to environmental_jobs.csv")
+    else:
+        print("No jobs found or an error occurred.")
