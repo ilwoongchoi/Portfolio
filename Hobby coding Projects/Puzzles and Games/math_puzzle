@@ -1,0 +1,139 @@
+int [][] grid = new int[7][7];
+boolean[][] selected = new boolean[7][7]; // Track selected numbers
+int[] rowSums = new int[7];
+int[] colSums = new int[7];
+int radius = 45;
+int spacing = 100;
+
+void setup() {
+  size(1000, 1000);
+  background(215, 227, 194);
+  generateGrid();
+  selectRandomNumbers();
+  drawGrid();
+  displayNumbers();
+  displayColumnsums();
+  displayRowsums();
+}
+
+void generateGrid() {
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 7; j++) {
+      grid[i][j] = (int)random(1, 10);
+      selected[i][j] = false; // Initially, no number is selected
+    }
+  }
+}
+
+void selectRandomNumbers() {
+  for (int i = 0; i < 7; i++) {
+    rowSums[i] = 0;
+    colSums[i] = 0;
+  }
+
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 7; j++) {
+      if (random(1) < 0.5) {
+        rowSums[i] += grid[i][j];
+        colSums[j] += grid[i][j];
+      }
+    }
+  }
+}
+
+void drawGrid() {
+  for (float i = 1.5; i <= 8.5; i++) {
+    line(150, i * spacing, 850, i * spacing);
+  }
+  for (float i = 1.5; i <= 8.5; i++) {
+    line(i * spacing, 150, i * spacing, 850);
+  }
+}
+
+void displayNumbers() {
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 7; j++) {
+      float x = (i + 2) * spacing;
+      float y = (j + 2) * spacing;
+      
+      fill(selected[i][j] ? color(127, 140, 109) : 255);
+      circle(x, y, 90);
+      
+      fill(0);
+      textSize(32);
+      textAlign(CENTER, CENTER);
+      text(grid[i][j], x, y);
+    }
+  }
+}
+
+void displayColumnsums() {
+  for (int i = 0; i < 7; i++) {
+    float x = (i + 2) * spacing;
+    fill(checkColumnSum(i) ? color(127, 140, 109) : 215, 227, 194);
+    circle(900, x, 90);
+    
+    fill(0);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text(colSums[i], 900, x);
+  }
+}
+
+void displayRowsums() {
+  for (int j = 0; j < 7; j++) {
+    float y = (j + 2) * spacing;
+    fill(checkRowSum(j) ? color(127, 140, 109) : 215, 227, 194);
+    circle(y, 100, 90);
+    
+    fill(0);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text(rowSums[j], y, 100);
+  }
+}
+
+void mousePressed() {
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 7; j++) {
+      float x = (i + 2) * spacing;
+      float y = (j + 2) * spacing;
+      float d = dist(mouseX, mouseY, x, y);
+      
+      if (d < radius) {
+        selected[i][j] = !selected[i][j]; // Toggle selection
+        redrawGrid();
+      }
+    }
+  }
+}
+
+void redrawGrid() {
+  background(215, 227, 194);
+  drawGrid();
+  displayNumbers();
+  displayColumnsums();
+  displayRowsums();
+}
+
+boolean checkRowSum(int rowIndex) {
+  int sum = 0;
+  for (int j = 0; j < 7; j++) {
+    if (selected[rowIndex][j]) {
+      sum += grid[rowIndex][j];
+    }
+  }
+  return sum == rowSums[rowIndex];
+}
+
+boolean checkColumnSum(int colIndex) {
+  int sum = 0;
+  for (int i = 0; i < 7; i++) {
+    if (selected[i][colIndex]) {
+      sum += grid[i][colIndex];
+    }
+  }
+  return sum == colSums[colIndex];
+}
+
+void draw() {}
