@@ -1,0 +1,241 @@
+import pygame
+import random
+
+# Constants
+WIDTH, HEIGHT = 800, 800
+GRID_SIZE = 50
+TILE_SIZE = WIDTH // GRID_SIZE
+
+# Colors
+BACKGROUND = (30, 30, 30)
+PLANT_COLOR = (0, 200, 0)
+HERBIVORE_COLOR = (200, 100, 50)
+CARNIVORE_COLOR = (0, 0, 250)
+DEAD_COLOR = (120, 70, 30)
+
+# Initialize Pygame
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+clock = pygame.time.Clock()
+
+# Biogeochemical Cycles
+atmospheric_co2 = 1050000  # Initial atmospheric CO2
+atmospheric_o2 = 10000000 # Initial atmospheric O2  # CO2 dissolved in water
+soil_nitrogen = 100
+soil_organic_carbon = 0  # Nitrogen available in the soil
+
+# Entity Classes
+class Plant:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.age = 0
+        self.max_age = random.randint(200, 300)
+        self.size = 1  # Biomass size (affects photosynthesis and death rate)
+        self.reproduction_age = random.randint(50, 100) # Age when plant can reproduce
+        self.reproduction_energy_threshold = 3 # Minimum size for reproduction
+
+    def grow(self):
+        global atmospheric_co2, atmospheric_o2
+        # Photosynthesis: Absorb CO2 and release O2
+        if atmospheric_co2 > 0:
+            self.size += 0.1  # Plants grow if CO2 is available
+            atmospheric_co2 -= 1  # Plants absorb CO2
+            atmospheric_o2 +=1   # Plants release O2
+        self.age += 1
+        if self.age > self.max_age:
+            return "die"  # Plant dies after reaching max age
+        return None
+
+    def reproduce(self, plants):
+        if self.age >= self.reproduction_age and self.size >= self.reproduction_energy_threshold:
+            # Reproduce nearby (within a 3x3 grid)
+            for dx in [-1, 0, 1]:
+                for dy in [-1, 0, 1]:
+                    if dx == 0 and dy == 0:
+                        continue # Don't reproduce in the same spot
+                    new_x = self.x + dx
+                    new_y = self.y + dy
+                    if 0 <= new_x < GRID_SIZE and 0 <= new_y < GRID_SIZE:
+                        # Check if location is already occupied
+                        occupied = False
+                        for p in plants:
+                            if p.x == new_x and p.y == new_y:
+                                occupied = True
+                                break
+                        if not occupied:
+                            plants.append(Plant(new_x, new_y))
+                            self.size -= 1  # Reproduction cost (reduce plant size)
+                            return # Only reproduce once per turn
+            
+    def die(self):
+        global soil_organic_carbon, soil_nitrogen
+        soil_organic_carbon += 5  # Biomass decomposes into soil carbon
+        soil_nitrogen += 2  # Decomposing plants release nitrogen
+
+
+class Herbivore:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.energy = 150
+        self.max_energy = 800
+        self.reproduction_threshold = 700
+
+    def move(self):
+        self.x += random.choice([-1, 0, 1])
+        self.y += random.choice([-1, 0, 1])
+        self.x = max(0, min(GRID_SIZE - 1, self.x))
+        self.y = max(0, min(GRID_SIZE - 1, self.y))
+        
+
+        global atmospheric_o2, atmospheric_co2  # Access global atmospheric oxygen
+        if atmospheric_o2 > 0:
+            self.energy -= 2  # Energy decreases over time
+            atmospheric_o2 -= 4 # Herbivores consume oxygen
+            atmospheric_co2 += 3
+        else:
+            self.energy -= 4 # If no oxygen, energy decreases faster
+
+    def eat(self, plants):
+        for plant in plants:
+            if plant.x == self.x and plant.y == self.y:
+                self.energy += 20  # Herbivore gains energy from eating plants
+                plants.remove(plant)
+                return
+
+    def reproduce(self, herbivores):
+        if self.energy > self.reproduction_threshold:
+            herbivores.append(Herbivore(self.x, self.y))
+            self.energy -= 150  # Reproduction cost
+
+    def die(self):
+        global soil_organic_carbon, soil_nitrogen
+        soil_organic_carbon += 200  # Animals contribute biomass to the soil
+        soil_nitrogen += 3  # Decomposing animals also release nitrogen
+
+class Carnivore:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.energy = 400
+        self.max_energy = 600
+        self.reproduction_threshold = 400
+
+    def move(self):
+        self.x += random.choice([-1, 0, 1])
+        self.y += random.choice([-1, 0, 1])
+        self.x = max(0, min(GRID_SIZE - 1, self.x))
+        self.y = max(0, min(GRID_SIZE - 1, self.y))
+
+        global atmospheric_o2, atmospheric_co2  # Access global atmospheric oxygen
+        if atmospheric_o2 > 0:
+            self.energy -= 2  # Energy decreases over time
+            atmospheric_o2 -= 4
+            atmospheric_co2 += 2# Carnivores consume oxygen
+        else:
+            self.energy -= 4 # If no oxygen, energy decreases faster
+
+    def eat(self, herbivores):
+        for herbivore in herbivores:
+            if herbivore.x == self.x and herbivore.y == self.y:
+                self.energy += 90  # Carnivore gains energy from eating herbivores
+                herbivores.remove(herbivore)
+                return
+
+    def reproduce(self, carnivores):
+        if self.energy > self.reproduction_threshold:
+            carnivores.append(Carnivore(self.x, self.y))
+            self.energy -= 200  # Reproduction cost
+
+    def die(self):
+        global soil_organic_carbon, soil_nitrogen
+        soil_organic_carbon += 200  # Animals contribute biomass to the soil
+        soil_nitrogen += 3  # Decomposing animals also release nitrogen
+
+
+# World Setup
+plants = [Plant(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(GRID_SIZE * GRID_SIZE//2)] # Reduced initial plants
+herbivores = [Herbivore(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(20)]
+carnivores = [Carnivore(random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1)) for _ in range(20)]
+
+
+# Track Elements in Atmosphere and Biosphere
+def track_elements():
+    global atmospheric_co2, atmospheric_o2, soil_nitrogen
+    biosphere_co2 = sum(plant.size for plant in plants)  # Total carbon in plants
+    biosphere_o2 = biosphere_co2  # Oxygen released by plants is equal to carbon absorbed (simplified)
+    biosphere_nitrogen = 0  # Nitrogen in the biosphere is from plant biomass, only released when plants die
+    for plant in plants:
+        biosphere_nitrogen += plant.size  # Add nitrogen based on plant size
+    return biosphere_co2, biosphere_o2, biosphere_nitrogen
+
+# Draw world and elements status
+def draw_world():
+    screen.fill(BACKGROUND)
+    for plant in plants:
+        pygame.draw.rect(screen, PLANT_COLOR, (plant.x * TILE_SIZE, plant.y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+    for herbivore in herbivores:
+        pygame.draw.rect(screen, HERBIVORE_COLOR, (herbivore.x * TILE_SIZE, herbivore.y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+    for carnivore in carnivores:
+        pygame.draw.rect(screen, CARNIVORE_COLOR, (carnivore.x * TILE_SIZE, carnivore.y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+
+    # Track elements in the environment
+    biosphere_co2, biosphere_o2, biosphere_nitrogen = track_elements()
+
+    # Display the element flux with adjusted text size and position
+    font = pygame.font.SysFont(None, 22)  # Smaller font size to fit text within the screen
+    text1 = font.render(f"Atmospheric CO2: {atmospheric_co2}  Biosphere CO2: {biosphere_co2}", True, (255, 255, 255))
+    text2 = font.render(f"Atmospheric O2: {atmospheric_o2}  Biosphere O2: {biosphere_o2}", True, (255, 255, 255))
+    text3 = font.render(f"Soil Nitrogen: {soil_nitrogen}  Biosphere Nitrogen: {biosphere_nitrogen}", True, (255, 255, 255))
+    text4 = font.render(f"Soil Organic Carbon: {soil_organic_carbon}", True, (255, 255, 255))
+
+    # Positioning the text so that it fits within the screen
+    screen.blit(text1, (WIDTH - 380, HEIGHT - 120))
+    screen.blit(text2, (WIDTH - 380, HEIGHT - 90))
+    screen.blit(text3, (WIDTH - 380, HEIGHT - 60))
+    screen.blit(text4, (WIDTH - 380, HEIGHT - 30))
+
+    pygame.display.flip()
+
+def microbial_respiration():
+    global soil_organic_carbon, atmospheric_co2
+    respiration_rate = 1  # Microbes respire 2% of soil carbon per cycle
+    respired_co2 = soil_organic_carbon * respiration_rate
+    atmospheric_co2 += respired_co2  # Release CO2 back into atmosphere
+    soil_organic_carbon -= respired_co2  
+
+# Main Loop
+running = True
+while running:
+    clock.tick(10)  # Control simulation speed
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Update Simulation
+    for plant in plants[:]:
+        if plant.grow() == "die":
+            plant.die()
+            plants.remove(plant)
+        else:
+            plant.reproduce(plants)  # Plants try to reproduce
+
+    for herbivore in herbivores[:]:
+        herbivore.move()
+        herbivore.eat(plants)
+        herbivore.reproduce(herbivores)
+        if herbivore.energy <= 0:
+            herbivores.remove(herbivore)
+
+    for carnivore in carnivores[:]:
+        carnivore.move()
+        carnivore.eat(herbivores)
+        carnivore.reproduce(carnivores)
+        if carnivore.energy <= 0:
+            carnivores.remove(carnivore)
+
+    microbial_respiration()  # Update soil carbon loss to atmosphere
+    draw_world()  # Render the world
+
+pygame.quit()
