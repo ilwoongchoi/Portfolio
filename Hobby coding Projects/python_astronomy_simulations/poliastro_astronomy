@@ -1,0 +1,18 @@
+import numpy as np
+
+from poliastro.bodies import Earth, Sun
+from poliastro.constants import J2000
+from poliastro.examples import churi, iss, molniya
+from poliastro.plotting.orbit import plotter
+from poliastro.twobody import Orbit
+
+# More info: https://plotly.com/python/renderers/
+import plotly.io as pio
+
+pio.renderers.default = "plotly_mimetype+notebook_connected"
+
+yr4 = Orbit.from_sbdb("2024 YR4")
+frame_yr4 = plotter(use_3d=True)  # Create a frame for Earth and eros
+frame_yr4.plot_body_orbit(Earth, J2000)
+frame_yr4.plot(yr4, label="yr4")
+frame_yr4.show()
