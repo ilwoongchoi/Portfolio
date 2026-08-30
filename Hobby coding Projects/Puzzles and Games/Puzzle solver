@@ -1,0 +1,66 @@
+GRID_SIZE = 5
+grid = [[None for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
+
+# Example centers: place them in (row, col)
+centers = [(4, 1), (4, 2), (2, 3), (1, 4), (5, 3.5)]
+
+def get_symmetric_cell(center, cell):
+    cx, cy = center
+    x, y = cell
+    return (2 * cx - x, 2 * cy - y)
+
+def is_valid(cell):
+    x, y = cell
+    return 0 <= x < GRID_SIZE and 0 <= y < GRID_SIZE
+
+def grow_region(center, assigned):
+    region = set()
+    frontier = {center}
+
+    while frontier:
+        new_frontier = set()
+        for cell in frontier:
+            sym = get_symmetric_cell(center, cell)
+            if not is_valid(sym): continue
+            if cell in assigned or sym in assigned: continue
+
+            region.add(cell)
+            region.add(sym)
+            assigned.add(cell)
+            assigned.add(sym)
+
+            # Explore neighbors
+            for dx, dy in [(-1,0),(1,0),(0,-1),(0,1)]:
+                n = (cell[0]+dx, cell[1]+dy)
+                if n not in assigned and is_valid(n):
+                    new_frontier.add(n)
+
+        frontier = new_frontier
+
+    return region
+
+
+
+def solve(centers):
+    assigned = set()
+    regions = []
+
+    for c in centers:
+        region = grow_region(c, assigned)
+        regions.append((c, region))
+
+    return regions
+
+
+
+
+def print_solution(regions):
+    grid = [['.' for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
+    for i, (center, region) in enumerate(regions):
+        label = chr(65 + i)
+        for r, c in region:
+            grid[r][c] = label
+    for row in grid:
+        print(' '.join(row))
+regions = solve(centers)
+print_solution(regions)
