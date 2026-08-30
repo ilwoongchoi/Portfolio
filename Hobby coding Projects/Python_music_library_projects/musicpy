@@ -1,0 +1,52 @@
+from musicpy import note, chord, play
+import random
+
+pitches = ['C', 'D', 'Eb', 'F', 'G', 'A', 'Bb']
+octaves = [4]
+durations = [0.25]  # quarter notes
+tempo = 120
+melody_length = 24
+step_range = 3  # max step range for pitch movement
+
+# Initialize melody notes list
+current_pitch_idx = random.randint(0, len(pitches) - 1)
+current_octave_idx = 0  # octave index in octaves list
+first_duration = durations[0]
+
+melody_notes = [note(pitches[current_pitch_idx], octaves[current_octave_idx], first_duration)]
+
+# Generate melody notes within step_range
+for _ in range(melody_length - 1):
+    min_pitch_idx = max(0, current_pitch_idx - step_range)
+    max_pitch_idx = min(len(pitches) - 1, current_pitch_idx + step_range)
+    next_pitch_idx = random.randint(min_pitch_idx, max_pitch_idx)
+
+    melody_notes.append(note(pitches[next_pitch_idx], octaves[current_octave_idx], first_duration))
+
+    current_pitch_idx = next_pitch_idx
+
+# Generate lower hand chords (simple triads based on melody notes)
+lower_hand_notes = []
+for n in melody_notes:
+    # Build a basic triad chord: root (melody note), third and fifth above
+    root_idx = pitches.index(n.name)
+    third_idx = (root_idx + 2) % len(pitches)
+    fifth_idx = (root_idx + 4) % len(pitches)
+
+    chord_notes = [
+        note(pitches[root_idx], octaves[current_octave_idx] - 1, n.duration),
+        note(pitches[third_idx], octaves[current_octave_idx] - 1, n.duration),
+        note(pitches[fifth_idx], octaves[current_octave_idx] - 1, n.duration)
+    ]
+    lower_hand_notes.append(chord(chord_notes))
+
+# Combine melody notes with lower hand chords into full piece
+# Start full_piece with first combined chord
+full_piece = chord([melody_notes[0]] + list(lower_hand_notes[0].notes))
+
+for i in range(1, melody_length):
+    combined_notes = [melody_notes[i]] + list(lower_hand_notes[i].notes)
+    combined = chord(combined_notes)
+    full_piece |= combined
+
+play(full_piece, bpm=tempo)
