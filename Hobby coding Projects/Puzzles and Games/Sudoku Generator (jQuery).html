@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku App</title>
+    <style>
+      table {
+        display: grid;
+        grid-template-columns: repeat(9, 40px);
+        grid-template-rows: repeat(9, 40px);
+        gap: 1px;
+      }
+
+      td {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        font-size: 20px;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      input {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        font-size: 20px;
+        border: none;
+        background: none;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      input:focus {
+        outline: none;
+      }
+
+      #winMessage {
+        display: none;
+        color: green;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .front-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .level-btn {
+        font-size: 20px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Front page with difficulty buttons -->
+    <div id="frontPage" class="front-page">
+      <h2>Choose Difficulty Level</h2>
+      <button class="level-btn" onclick="startGame('easy')">Easy</button> <button
+        class="level-btn" onclick="startGame('medium')">Medium</button> <button
+        class="level-btn" onclick="startGame('hard')">Hard</button> </div>
+    <!-- Sudoku board page -->
+    <div id="sudokuPage" style="display: none;">
+      <h2>Sudoku Puzzle</h2>
+      <button id="generateBtn">Generate New Puzzle</button>
+      <div id="winMessage">YOU WIN!</div>
+      <table id="sudokuBoard">
+      </table>
+    </div>
+    <script>
+      const SIZE = 9;
+      const SUBGRID = 3;
+
+      function generateFullBoard(board) {
+        function isValid(num, row, col) {
+          for (let i = 0; i < SIZE; i++) {
+            if (board[row][i] === num || board[i][col] === num) return false;
+            let subRow = Math.floor(row / SUBGRID) * SUBGRID + Math.floor(i / SUBGRID);
+            let subCol = Math.floor(col / SUBGRID) * SUBGRID + (i % SUBGRID);
+            if (board[subRow][subCol] === num) return false;
+          }
+          return true;
+        }
+
+        function solve(row = 0, col = 0) {
+          if (row === SIZE) return true;
+          if (col === SIZE) return solve(row + 1, 0);
+          if (board[row][col] !== 0) return solve(row, col + 1);
+
+          let numbers = [...Array(SIZE).keys()].map(n => n + 1).sort(() => Math.random() - 0.5);
+          for (let num of numbers) {
+            if (isValid(num, row, col)) {
+              board[row][col] = num;
+              if (solve(row, col + 1)) return true;
+              board[row][col] = 0;
+            }
+          }
+          return false;
+        }
+
+        solve();
+      }
+
+      function createPuzzle(board, filledCells) {
+        let puzzle = board.map(row => [...row]);
+        let attempts = SIZE * SIZE - filledCells; // Number of empty cells to create
+
+        // Randomly clear cells until the specified number of filled cells is reached
+        while (attempts > 0) {
+          let row = Math.floor(Math.random() * SIZE);
+          let col = Math.floor(Math.random() * SIZE);
+          if (puzzle[row][col] !== 0) {
+            puzzle[row][col] = 0;
+            attempts--;
+          }
+        }
+        return puzzle;
+      }
+
+      function generateSudoku(difficulty) {
+        let board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
+        generateFullBoard(board);
+
+        let filledCells;
+        if (difficulty === 'easy') filledCells = 40; // Easy: 40 filled squares
+        else if (difficulty === 'medium') filledCells = 27; // Medium: 27 filled squares
+        else filledCells = 13; // Hard: 13 filled squares
+
+        let puzzle = createPuzzle(board, filledCells);
+        displayBoard(puzzle);
+      }
+
+      function displayBoard(board) {
+        const table = document.getElementById("sudokuBoard");
+        table.innerHTML = ''; // Clear the previous board
+
+        for (let i = 0; i < SIZE; i++) {
+          for (let j = 0; j < SIZE; j++) {
+            const cell = document.createElement("td");
+            if (board[i][j] !== 0) {
+              cell.textContent = board[i][j];
+            } else {
+              const input = document.createElement("input");
+              input.type = 'text';
+              input.maxLength = 1;
+              input.addEventListener('input', function () {
+                let value = input.value;
+                if (value && !/^[1-9]$/.test(value)) {
+                  input.value = '';
+                }
+              });
+              cell.appendChild(input);
+            }
+            table.appendChild(cell);
+          }
+        }
+      }
+
+      function checkWin() {
+        let board = [];
+        let isWin = true;
+
+        const cells = document.querySelectorAll("#sudokuBoard td");
+        cells.forEach((cell, index) => {
+          let row = Math.floor(index / SIZE);
+          let col = index % SIZE;
+
+          let input = cell.querySelector("input");
+          let value = input ? input.value : cell.textContent;
+          if (value === "") {
+            isWin = false;
+          } else {
+            board[row] = board[row] || [];
+            board[row][col] = parseInt(value);
+          }
+        });
+
+        if (isWin) {
+          // Check if all cells are filled before checking for correctness
+          for (let i = 0; i < SIZE; i++) {
+            for (let j = 0; j < SIZE; j++) {
+              if (board[i][j] === undefined) {
+                isWin = false;
+                break;
+              }
+            }
+            if (!isWin) break;
+          }
+
+          // Check rows, columns, and subgrids for validity
+          for (let i = 0; i < SIZE; i++) {
+            let rowSet = new Set();
+            let colSet = new Set();
+            let subgridSet = new Set();
+            for (let j = 0; j < SIZE; j++) {
+              rowSet.add(board[i][j]);
+              colSet.add(board[j][i]);
+              let subRow = Math.floor(i / SUBGRID) * SUBGRID + Math.floor(j / SUBGRID);
+              let subCol = Math.floor(i % SUBGRID) * SUBGRID + (j % SUBGRID);
+              subgridSet.add(board[subRow][subCol]);
+            }
+            if (rowSet.size !== SIZE || colSet.size !== SIZE || subgridSet.size !== SIZE) {
+              isWin = false;
+            }
+          }
+        }
+
+        if (isWin) {
+          document.getElementById("winMessage").style.display = 'block';
+        }
+      }
+
+      function startGame(level) {
+        document.getElementById("frontPage").style.display = 'none';
+        document.getElementById("sudokuPage").style.display = 'block';
+        generateSudoku(level);
+      }
+
+      document.getElementById("generateBtn").addEventListener('click', function () {
+        const difficulty = prompt("Enter difficulty (easy, medium, or hard):").toLowerCase();
+        generateSudoku(difficulty);
+        document.getElementById("winMessage").style.display = 'none'; // Hide the win message when generating new puzzle
+      });
+
+      // Only check for win when all cells are filled
+      setInterval(checkWin, 500); // Check for a win every 500ms
+    </script>
+  </body>
+</html>

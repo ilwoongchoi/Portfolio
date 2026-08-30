@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku App - Game</title>
+    <link type="text/css" rel="stylesheet" href="file:///C:/Users/User/Documents/Code/games.css">
+  </head>
+  <body>
+    <div id="sudokuPage">
+      <h2>Sudoku Puzzle</h2>
+      <button id="generateBtn">Generate New Puzzle</button>
+      <div id="winMessage" style="display: none;">YOU WIN!</div>
+      <table id="sudokuBoard">
+      </table>
+    </div>
+    <div id="main-menu"> <a href="file:///C:/Users/User/Documents/Code/index.html"
+
+        id="mainmenulink"><button id="backtoMainpage" style="width: 100px;">
+          Main Menu </button></a> </div>
+    <script>
+    const SIZE = 9;
+const SUBGRID = 3;
+
+function generateFullBoard(board) {
+  function isValid(num, row, col) {
+    for (let i = 0; i < SIZE; i++) {
+      if (board[row][i] === num || board[i][col] === num) return false;
+      let subRow = Math.floor(row / SUBGRID) * SUBGRID + Math.floor(i / SUBGRID);
+      let subCol = Math.floor(col / SUBGRID) * SUBGRID + (i % SUBGRID);
+      if (board[subRow][subCol] === num) return false;
+    }
+    return true;
+  }
+
+  function solve(row = 0, col = 0) {
+    if (row === SIZE) return true;
+    if (col === SIZE) return solve(row + 1, 0);
+    if (board[row][col] !== 0) return solve(row, col + 1);
+
+    let numbers = [...Array(SIZE).keys()].map(n => n + 1).sort(() => Math.random() - 0.5);
+    for (let num of numbers) {
+      if (isValid(num, row, col)) {
+        board[row][col] = num;
+        if (solve(row, col + 1)) return true;
+        board[row][col] = 0;
+      }
+    }
+    return false;
+  }
+
+  solve();
+}
+
+function createPuzzle(board, filledCells) {
+  let puzzle = board.map(row => [...row]);
+  let attempts = SIZE * SIZE - filledCells; // Number of empty cells to create
+
+  while (attempts > 0) {
+    let row = Math.floor(Math.random() * SIZE);
+    let col = Math.floor(Math.random() * SIZE);
+    if (puzzle[row][col] !== 0) {
+      puzzle[row][col] = 0;
+      attempts--;
+    }
+  }
+  return puzzle;
+}
+
+function generateSudoku(difficulty) {
+  let board = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
+  generateFullBoard(board);
+
+  let filledCells;
+  if (difficulty === 'easy') filledCells = 40; // Easy: 40 filled squares
+  else if (difficulty === 'medium') filledCells = 27; // Medium: 27 filled squares
+  else filledCells = 13; // Hard: 13 filled squares
+
+  let puzzle = createPuzzle(board, filledCells);
+  displayBoard(puzzle);
+}
+
+function displayBoard(board) {
+  const table = document.getElementById("sudokuBoard");
+  table.innerHTML = ''; // Clear the previous board
+
+  for (let i = 0; i < SIZE; i++) {
+    let row = document.createElement("tr");
+    for (let j = 0; j < SIZE; j++) {
+      const cell = document.createElement("td");
+      if (board[i][j] !== 0) {
+        cell.textContent = board[i][j];
+      } else {
+        const input = document.createElement("input");
+        input.type = 'text';
+        input.maxLength = 1;
+        input.addEventListener('input', function () {
+          let value = input.value;
+          if (value && !/^[1-9]$/.test(value)) {
+            input.value = '';
+          }
+        });
+        cell.appendChild(input);
+      }
+      row.appendChild(cell);
+    }
+    table.appendChild(row);
+  }
+}
+
+function checkWin() {
+  let board = [];
+  let isWin = true;
+
+  const cells = document.querySelectorAll("#sudokuBoard td");
+  cells.forEach((cell, index) => {
+    let row = Math.floor(index / SIZE);
+    let col = index % SIZE;
+
+    let input = cell.querySelector("input");
+    let value = input ? input.value : cell.textContent;
+    if (value === "") {
+      isWin = false;
+    } else {
+      board[row] = board[row] || [];
+      board[row][col] = parseInt(value);
+    }
+  });
+
+  if (isWin) {
+    for (let i = 0; i < SIZE; i++) {
+      for (let j = 0; j < SIZE; j++) {
+        if (board[i][j] === undefined) {
+          isWin = false;
+          break;
+        }
+      }
+      if (!isWin) break;
+    }
+
+    for (let i = 0; i < SIZE; i++) {
+      let rowSet = new Set();
+      let colSet = new Set();
+      let subgridSet = new Set();
+      for (let j = 0; j < SIZE; j++) {
+        rowSet.add(board[i][j]);
+        colSet.add(board[j][i]);
+        let subRow = Math.floor(i / SUBGRID) * SUBGRID + Math.floor(j / SUBGRID);
+        let subCol = Math.floor(i % SUBGRID) * SUBGRID + (j % SUBGRID);
+        subgridSet.add(board[subRow][subCol]);
+      }
+      if (rowSet.size !== SIZE || colSet.size !== SIZE || subgridSet.size !== SIZE) {
+        isWin = false;
+      }
+    }
+  }
+
+  if (isWin) {
+    document.getElementById("winMessage").style.display = 'block';
+  }
+}
+
+document.getElementById("generateBtn").addEventListener('click', function () {
+  const difficulty = localStorage.getItem("difficulty");
+  generateSudoku(difficulty);
+  document.getElementById("winMessage").style.display = 'none'; // Hide the win message when generating new puzzle
+});
+
+// Check for win when all cells are filled
+setInterval(checkWin, 500); // Check every 500ms
+window.onload = function () {
+  const difficulty = localStorage.getItem("difficulty");
+  if (difficulty) {
+    generateSudoku(difficulty);
+  }
+};
+
+</script>
+  </body>
+</html>
