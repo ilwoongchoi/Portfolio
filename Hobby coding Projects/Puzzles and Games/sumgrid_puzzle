@@ -1,0 +1,155 @@
+from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.widget import Widget
+from kivy.uix.floatlayout import FloatLayout
+from kivy.graphics import Ellipse, Color
+from kivy.core.window import Window
+from random import randint, sample
+
+
+class SumCircle(Widget):
+    """A custom widget to display sum inside a circle."""
+    def __init__(self, text, pos, **kwargs):
+        super().__init__(**kwargs)
+        self.size = (50, 50)  # Circle size
+        self.pos = pos
+        self.glow = False  # Flag to toggle glow
+
+        with self.canvas:
+            Color(0.5, 0.55, 0.43, 1)  # Initial color (default is non-glowing)
+            self.circle = Ellipse(pos=self.pos, size=self.size)
+
+        # Center the number inside the circle
+        self.label = Label(
+            text=str(text),
+            size_hint=(None, None),
+            size=(50, 50),  # Ensure label size is the same as the circle size
+            pos=(self.pos[0] , self.pos[1] ),  # Adjusted position for center alignment
+            color=(1, 1, 1, 1),
+            font_size=18
+        )
+        self.add_widget(self.label)
+
+    def update_text(self, new_text):
+        """Updates the sum text inside the circle."""
+        self.label.text = str(new_text)
+
+    def toggle_glow(self, glowing):
+        """Toggles the circle glow."""
+        if glowing:
+            self.glow = True
+            with self.canvas:
+                Color(0, 1, 0, 1)  # Green glow
+                self.circle = Ellipse(pos=self.pos, size=self.size)
+        else:
+            self.glow = False
+            with self.canvas:
+                Color(0.5, 0.55, 0.43, 1)  # Default color
+                self.circle = Ellipse(pos=self.pos, size=self.size)
+
+
+class GridApp(App):
+    def build(self):
+        # Resize the window to be larger
+        Window.size = (1000, 1000)
+
+        self.grid = [[randint(1, 10) for _ in range(7)] for _ in range(7)]
+        self.selected = [[False for _ in range(7)] for _ in range(7)]  # Player selection
+        self.hidden_targets = [[False for _ in range(7)] for _ in range(7)]  # Correct cells to find
+        self.spacing = 100
+
+        layout = FloatLayout()
+
+        # Randomly select hidden target cells
+        self.pre_select_targets()
+
+        # Calculate row & column sums of hidden targets
+        self.row_sums = [sum(self.grid[i][j] for j in range(7) if self.hidden_targets[i][j]) for i in range(7)]
+        self.col_sums = [sum(self.grid[i][j] for i in range(7) if self.hidden_targets[i][j]) for j in range(7)]
+
+        # Main grid layout
+        self.grid_layout = GridLayout(cols=7, size_hint=(None, None), size=(700, 700))
+        self.grid_layout.pos_hint = {'center_x': 0.5, 'center_y': 0.5}
+
+        # Sum circle widgets storage
+        self.row_sums_widgets = []
+        self.col_sums_widgets = []
+
+        # Create sum display for columns (above grid)
+        for j in range(7):
+            sum_circle = SumCircle(text=self.col_sums[j], pos=(300 + j * self.spacing, 900))
+            layout.add_widget(sum_circle)
+            self.col_sums_widgets.append(sum_circle)
+
+        # Create sum display for rows (to the right of grid)
+        for i in range(7):
+            sum_circle = SumCircle(text=self.row_sums[i], pos=(1000, 800 - i * self.spacing))
+            layout.add_widget(sum_circle)
+            self.row_sums_widgets.append(sum_circle)
+
+        self.update_grid_display()
+        layout.add_widget(self.grid_layout)
+
+        return layout
+
+    def pre_select_targets(self):
+        """Randomly selects hidden target cells that must be found."""
+        for i in range(7):
+            selected_indices = sample(range(7), randint(2, 4))  # Select 2-4 cells in each row
+            for j in selected_indices:
+                self.hidden_targets[i][j] = True
+
+    def update_grid_display(self):
+        """Updates the grid display."""
+        self.grid_layout.clear_widgets()
+
+        for i in range(7):
+            for j in range(7):
+                num_button = Button(
+                    text=str(self.grid[i][j]),
+                    size=(90, 90),
+                    background_color=(1, 1, 1, 1) if not self.selected[i][j] else (0.2, 0.8, 0.2, 1)
+                )
+                num_button.bind(on_press=lambda btn, i=i, j=j: self.toggle_selection(i, j))
+                self.grid_layout.add_widget(num_button)
+
+        # Update the glow for sum circles
+        self.update_glow()
+
+    def toggle_selection(self, i, j):
+        """Toggles selection and checks if the player is matching the hidden targets."""
+        self.selected[i][j] = not self.selected[i][j]
+        self.update_grid_display()
+
+        if self.check_win():
+            print("You found the correct pattern!")
+
+    def update_glow(self):
+        """Updates the glow effect for the sum circles based on the selection state."""
+        for i in range(7):
+            row_sum = sum(self.grid[i][j] for j in range(7) if self.selected[i][j])
+            col_sum = sum(self.grid[j][i] for j in range(7) if self.selected[j][i])
+
+            # Update row sum circle glow
+            self.row_sums_widgets[i].toggle_glow(row_sum == self.row_sums[i])
+
+            # Update column sum circle glow
+            self.col_sums_widgets[i].toggle_glow(col_sum == self.col_sums[i])
+
+    def check_win(self):
+        """Checks if the selected cells match the hidden target sums."""
+        for i in range(7):
+            if sum(self.grid[i][j] for j in range(7) if self.selected[i][j]) != self.row_sums[i]:
+                return False
+
+        for j in range(7):
+            if sum(self.grid[i][j] for i in range(7) if self.selected[i][j]) != self.col_sums[j]:
+                return False
+
+        return True
+
+
+if __name__ == '__main__':
+    GridApp().run()
