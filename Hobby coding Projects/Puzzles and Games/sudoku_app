@@ -1,0 +1,98 @@
+Python 3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license()" for more information.
+>>> import random
+... from kivy.app import App
+... from kivy.uix.gridlayout import GridLayout
+... from kivy.uix.textinput import TextInput
+... from kivy.uix.button import Button
+... from kivy.uix.boxlayout import BoxLayout
+... from kivy.uix.label import Label
+... 
+... class SudokuGame(GridLayout):
+...     def __init__(self, **kwargs):
+...         super().__init__(cols=9, spacing=2, **kwargs)
+...         self.board = self.generate_sudoku()
+...         self.inputs = []
+...         
+...         for row in range(9):
+...             row_inputs = []
+...             for col in range(9):
+...                 num = self.board[row][col]
+...                 ti = TextInput(text=str(num) if num != 0 else '', multiline=False, font_size=24,
+...                                halign='center', size_hint=(1, 1))
+...                 if num != 0:
+...                     ti.readonly = True  # Lock pre-filled cells
+...                 row_inputs.append(ti)
+...                 self.add_widget(ti)
+...             self.inputs.append(row_inputs)
+... 
+...     def generate_sudoku(self):
+...         """Generates and returns a valid Sudoku board with missing numbers."""
+...         board = [[0] * 9 for _ in range(9)]
+...         for _ in range(11):  # Fill some random spots
+...             row, col = random.randint(0, 8), random.randint(0, 8)
+...             num = random.randint(1, 9)
+...             while not self.is_valid(board, row, col, num) or board[row][col] != 0:
+...                 row, col, num = random.randint(0, 8), random.randint(0, 8), random.randint(1, 9)
+            board[row][col] = num
+        self.solve(board)
+        self.remove_numbers(board, difficulty=40)
+        return board
+
+    def is_valid(self, board, row, col, num):
+        for i in range(9):
+            if board[row][i] == num or board[i][col] == num:
+                return False
+        box_x, box_y = (row // 3) * 3, (col // 3) * 3
+        for i in range(3):
+            for j in range(3):
+                if board[box_x + i][box_y + j] == num:
+                    return False
+        return True
+
+    def solve(self, board):
+        for row in range(9):
+            for col in range(9):
+                if board[row][col] == 0:
+                    for num in range(1, 10):
+                        if self.is_valid(board, row, col, num):
+                            board[row][col] = num
+                            if self.solve(board):
+                                return True
+                            board[row][col] = 0
+                    return False
+        return True
+
+    def remove_numbers(self, board, difficulty=40):
+        removed = 0
+        while removed < difficulty:
+            row, col = random.randint(0, 8), random.randint(0, 8)
+            if board[row][col] != 0:
+                board[row][col] = 0
+                removed += 1
+
+    def check_solution(self, instance):
+        """Check if the user's solution is correct"""
+        user_board = [[int(self.inputs[row][col].text) if self.inputs[row][col].text else 0 for col in range(9)] for row in range(9)]
+        if self.solve(user_board):
+            self.result_label.text = "Correct! 🎉"
+        else:
+            self.result_label.text = "Incorrect! ❌"
+
+class SudokuApp(App):
+    def build(self):
+        layout = BoxLayout(orientation='vertical')
+        sudoku_grid = SudokuGame()
+        layout.add_widget(sudoku_grid)
+        
+        check_button = Button(text="Check Solution", size_hint=(1, 0.1), font_size=20)
+        check_button.bind(on_press=sudoku_grid.check_solution)
+        layout.add_widget(check_button)
+
+        sudoku_grid.result_label = Label(text="", font_size=20, size_hint=(1, 0.1))
+        layout.add_widget(sudoku_grid.result_label)
+
+        return layout
+
+if __name__ == '__main__':
+    SudokuApp().run()
