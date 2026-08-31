@@ -1,0 +1,467 @@
+// 3-Attractor Based Tile Recommendation System for Skeleton
+// Energy, Information, Repair + Air Cavity Discharge + Carbon Integration
+//
+// Circuit Homeostasis Blueprint (first-draft_annotated1.md):
+//   Each tile traces a specific circuit pathway through ~80 nodes.
+//   8D parameters are derived from actual node signal propagation (knit pattern).
+//   Energy Attractor    → LeftD2 → Carbon → NaCl → Actomyosin → SDH → COX → heme → steel → water_vapour → clay_gouge
+//   Information Attractor → MC1R → Glymphatic → Cysteine → Memory_entropy → Hind_insula → Carbon → Sulforaphane → Histosol
+//   Repair Attractor    → Substance_P → Autophagy → Collagen → Methionine → Copper_iron → Fold_belt → Mycorradicin → SDH
+//   Air Cavity          → heme ↔ memory_entropy (Competitive) + clay_gouge ↔ actomyosin (False)
+//   Carbon Integration  → Carbon → all 3 attractor cross-points
+//
+// All 128 profiles follow the circuit homeostasis blueprint.
+// 4 special boundary types override with jitter/random rules:
+//   Competitive Attractor (Air Cavity 1: Energy↔Information, boundary param = r)
+//     - Energy direction (ST + blood O):  r jitter 15%, others jitter 30%
+//     - Information direction (blood A, non-ST): r jitter 30%, others jitter 15%
+//   False Attractor (Air Cavity 2: Energy↔Repair, boundary param = d)
+//     - Energy direction (Female, non-ST): d = pure random
+//     - Repair direction (ST-male): d = inverse-reciprocal weighted random from stress
+//  center
+
+import { simulateTilePathway, profileToCircuitInit } from './circuit_engine.js';
+import { tilePhaseRules } from './engine.js';
+
+const _c = (v) => Math.max(0, Math.min(1, v));
+
+// 8D parameter ranges (universe-prose.md line 1698-1709)
+const PARAM_RANGES = {
+  r:     [0.2, 1.0],
+  h:     [0.2, 0.9],
+  d:     [0.1, 0.95],
+  p:     [0.1, 1.0],
+  s:     [0.1, 1.0],
+  gamma: [0.0, 1.0],
+  g:     [0.0, 1.0],
+  nu:    [0.0, 1.0]
+};
+
+function hash01(seed, index) {
+  const x = Math.sin(seed * 12.9898 + index * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+function jitterAround(center, pct, seed, idx) {
+  const range = pct * 0.5;
+  const jitter = (hash01(seed, idx) * 2 - 1) * range;
+  return _c(center + jitter);
+}
+
+function jitterAroundRanged(dim, center, pct, seed, idx) {
+  return clampToRange(dim, jitterAround(center, pct, seed, idx));
+}
+
+function inverseReciprocalDeterministic(center, seedBase) {
+  let best = center, bestWeight = -1;
+  for (let i = 0; i < 12; i++) {
+    const candidate = hash01(seedBase, i);
+    const dist = Math.abs(candidate - center);
+    const weight = 1 / (dist + 0.01);
+    if (weight > bestWeight) {
+      bestWeight = weight;
+      best = candidate;
+    }
+  }
+  return best;
+}
+
+// Classify profile into boundary type or 'normal'
+// Returns { type: 'competitive_energy' | 'competitive_info' | 'false_energy' | 'false_repair' | 'normal', boundaryParam: 'r' | 'd' | null }
+//
+// Air Cavity 1 (Competitive Attractor, Energy↔Information, boundary = r):
+//   Energy direction: ST temperaments — heme(Energy node) side approaching boundary
+//     ST = ISTJ, ESTJ, ISTP, ESTP (S+T in positions 2+3 or 2+4)
+//   Information direction: Blood A — memory_entropy(Information node) side approaching boundary
+//     Per prose line 2069: "ST vs A-type 경쟁"
+//
+// Air Cavity 2 (False Attractor, Energy↔Repair, boundary = d):
+//   Energy direction: Female — clay_gouge(Energy node) overactivation approaching boundary
+//     Per prose line 2076-2079: "여자가 남자 기만" = female from Energy side
+//   Repair direction: ST-male — actomyosin(Repair node) resistance approaching boundary
+//     Per prose line 2076-2079: "ST남자 저항" = ST male from Repair side
+//
+// Priority: false_repair (ST-male) checked before competitive_energy (ST) because
+// ST-male is a subset of ST — the more specific false attractor takes precedence.
+function classifyBoundary(profile) {
+  const mbti = profile.mbti || '';
+  const blood = (profile.blood || 'O').toUpperCase();
+  const gender = (profile.gender || 'M').toUpperCase();
+
+  const isST = mbti.length >= 4 && mbti[1] === 'S' && (mbti[2] === 'T' || mbti[3] === 'T');
+  const isFemale = gender === 'F';
+  const isSTMale = isST && gender === 'M';
+
+  // Air Cavity 2 checked first: false attractor is more specific
+  // False Attractor — Energy direction: Female (clay_gouge overactivation)
+  if (isFemale) {
+    return { type: 'false_energy', boundaryParam: 'd' };
+  }
+  // False Attractor — Repair direction: ST-male (actomyosin resistance)
+  if (isSTMale) {
+    return { type: 'false_repair', boundaryParam: 'd' };
+  }
+
+  // Air Cavity 1: Competitive Attractor
+  // Energy direction: ST (non-female, non-ST-male already filtered) — heme side
+  if (isST) {
+    return { type: 'competitive_energy', boundaryParam: 'r' };
+  }
+  // Information direction: Blood A — memory_entropy side
+  if (blood === 'A') {
+    return { type: 'competitive_info', boundaryParam: 'r' };
+  }
+
+  return { type: 'normal', boundaryParam: null };
+}
+
+export class AttractorTileSystem {
+  constructor() {
+    this.states = {
+      energy: { level: 0.5, stress: 0.5 },
+      information: { level: 0.5, stress: 0.5 },
+      repair: { level: 0.5, stress: 0.5 },
+      airCavities: {
+        upper: { pressure: 0.5 },
+        lower: { pressure: 0.5 }
+      },
+      carbon: { sync: 0.5, rewrite: 0.5 }
+    };
+    this._boundaryType = 'normal';
+    this._boundaryParam = null;
+  }
+
+  // Update attractor states based on profile — homeostasis blueprint
+  updateStates(profile) {
+    const hour = new Date().getHours();
+    const windowPhase = (hour / 24) * 16;
+
+    // Attractor vulnerability mapping (universe-prose.md 1964-1980):
+    // Energy weak:   SJ temperaments, Blood O, Male
+    // Info weak:     NF temperaments, Blood AB, Female
+    // Repair weak:   NT/SP temperaments, Blood B
+    const mbti = profile.mbti || '';
+    const blood = (profile.blood || 'O').toUpperCase();
+    const gender = (profile.gender || 'M').toUpperCase();
+    const layer = profile.layer || 'A';
+
+    const isSJ = mbti.length >= 3 && mbti[1] === 'S' && mbti[3] === 'J';
+    const isNF = mbti.length >= 3 && (mbti[1] === 'N' && (mbti[2] === 'F' || mbti[3] === 'F'));
+    const isNTSP = !isSJ && !isNF;
+
+    // Energy stress: SJ + O + Male → high; layer D → extreme
+    let energyStress = 0.5;
+    if (isSJ) energyStress += 0.15;
+    if (blood === 'O') energyStress += 0.1;
+    if (gender === 'M') energyStress += 0.05;
+    if (layer === 'B') energyStress += 0.05;
+    if (layer === 'D') energyStress += 0.1;
+
+    // Information stress: NF + AB + Female → high
+    let infoStress = 0.5;
+    if (isNF) infoStress += 0.15;
+    if (blood === 'AB') infoStress += 0.1;
+    if (gender === 'F') infoStress += 0.05;
+    if (layer === 'B') infoStress += 0.05;
+    if (layer === 'D') infoStress += 0.1;
+
+    // Repair stress: NT/SP + B → high
+    let repairStress = 0.5;
+    if (isNTSP) repairStress += 0.15;
+    if (blood === 'B') repairStress += 0.1;
+    if (layer === 'C') repairStress += 0.05;
+    if (layer === 'D') repairStress += 0.1;
+
+    // Circadian time modulation (toroidal cycle)
+    const timeMod = {
+      energy: Math.sin((windowPhase / 16) * Math.PI * 2) * 0.2,
+      information: Math.cos((windowPhase / 16) * Math.PI * 2) * 0.2,
+      repair: Math.sin((windowPhase / 16) * Math.PI * 2 + Math.PI) * 0.2
+    };
+
+    this.states.energy.stress = _c(energyStress + timeMod.energy);
+    this.states.energy.level = 1 - this.states.energy.stress;
+
+    this.states.information.stress = _c(infoStress + timeMod.information);
+    this.states.information.level = 1 - this.states.information.stress;
+
+    this.states.repair.stress = _c(repairStress + timeMod.repair);
+    this.states.repair.level = 1 - this.states.repair.stress;
+
+    // Air cavities
+    this.updateAirCavities(profile);
+
+    // Carbon integration
+    const avgStress = (this.states.energy.stress + this.states.information.stress + this.states.repair.stress) / 3;
+    this.states.carbon.sync = 1 - Math.abs(avgStress - 0.5) * 2;
+    this.states.carbon.rewrite = avgStress;
+
+    // Classify boundary type
+    const cls = classifyBoundary(profile);
+    this._boundaryType = cls.type;
+    this._boundaryParam = cls.boundaryParam;
+
+    // Build circuit initial conditions from profile for knit-pattern simulation
+    this._circuitInit = profileToCircuitInit(profile);
+  }
+
+  updateAirCavities(profile) {
+    const mbti = profile.mbti || '';
+    const blood = (profile.blood || 'O').toUpperCase();
+    const gender = (profile.gender || 'M').toUpperCase();
+    const isST = mbti.length >= 4 && mbti[1] === 'S' && (mbti[2] === 'T' || mbti[3] === 'T');
+    const isAType = blood === 'A';
+    const isFemale = gender === 'F';
+    const isSTMale = isST && gender === 'M';
+
+    // Upper cavity: ST vs A-type competitive pressure
+    if (isST && isAType) {
+      this.states.airCavities.upper.pressure = Math.min(1, this.states.airCavities.upper.pressure + 0.1);
+    } else if (isST && blood === 'O') {
+      this.states.airCavities.upper.pressure = Math.min(1, this.states.airCavities.upper.pressure + 0.06);
+    } else if (!isST && isAType) {
+      this.states.airCavities.upper.pressure = Math.min(1, this.states.airCavities.upper.pressure + 0.04);
+    } else {
+      this.states.airCavities.upper.pressure = Math.max(0, this.states.airCavities.upper.pressure - 0.03);
+    }
+
+    // Lower cavity: Manipulation Bag (Female vs ST-male)
+    if (isFemale && isSTMale) {
+      this.states.airCavities.lower.pressure = Math.min(1, this.states.airCavities.lower.pressure + 0.08);
+    } else if (isFemale && !isST) {
+      this.states.airCavities.lower.pressure = Math.min(1, this.states.airCavities.lower.pressure + 0.04);
+    } else if (isSTMale) {
+      this.states.airCavities.lower.pressure = Math.min(1, this.states.airCavities.lower.pressure + 0.05);
+    } else {
+      this.states.airCavities.lower.pressure = Math.max(0, this.states.airCavities.lower.pressure - 0.02);
+    }
+  }
+
+  // Build homeostasis vector from circuit simulation
+  // Each tile traces its specific pathway through the circuit nodes
+  _homeostasisVec(primaryAttractor) {
+    if (!this._circuitInit) return this._fallbackVec(primaryAttractor);
+
+    // Map tile primary to pathway name
+    const pathwayMap = {
+      energy: 'energy',
+      information: 'information',
+      repair: 'repair',
+      interface: 'interface',
+      integration: 'integration'
+    };
+    const pathwayName = pathwayMap[primaryAttractor] || 'energy';
+
+    // Simulate the circuit pathway to derive 8D vector
+    const vec = simulateTilePathway(pathwayName, this._circuitInit);
+
+    // Apply circadian time modulation (toroidal cycle from attractor states)
+    const E = this.states.energy;
+    const I = this.states.information;
+    const R = this.states.repair;
+    const C = this.states.carbon;
+
+    // Blend circuit-derived values with attractor state modulation
+    // Circuit provides the structural base; attractor states provide temporal dynamics
+    const out = {};
+    for (const dim of ['r','h','d','p','s','gamma','g','nu']) {
+      let val = vec[dim];
+
+      // Attractor state modulation per dim
+      if (dim === 'r') val = _c(val * 0.7 + E.level * 0.3);
+      else if (dim === 'gamma') val = _c(val * 0.7 + E.stress * 0.3);
+      else if (dim === 'h') val = _c(val * 0.7 + I.level * 0.3);
+      else if (dim === 's') val = _c(val * 0.7 + I.stress * 0.3);
+      else if (dim === 'p') val = _c(val * 0.7 + R.level * 0.3);
+      else if (dim === 'd') val = _c(val * 0.7 + R.stress * 0.3);
+      else if (dim === 'g') val = _c(val * 0.6 + C.sync * 0.4);
+      else if (dim === 'nu') val = _c(val * 0.6 + C.rewrite * 0.4);
+
+      out[dim] = clampToRange(dim, val);
+    }
+    return out;
+  }
+
+  // Fallback vector if circuit init not available
+  _fallbackVec(primaryAttractor) {
+    const E = this.states.energy;
+    const I = this.states.information;
+    const R = this.states.repair;
+    const C = this.states.carbon;
+    const base = {
+      r: E.level, g: C.sync, gamma: E.stress,
+      h: I.level, nu: C.rewrite, s: I.stress,
+      p: R.level, d: R.stress
+    };
+    const out = {};
+    for (const dim of ['r','h','d','p','s','gamma','g','nu']) {
+      out[dim] = clampToRange(dim, base[dim]);
+    }
+    return out;
+  }
+
+  // Apply boundary-type-specific parameter overrides
+  _applyBoundaryOverride(vec, primaryAttractor) {
+    const bt = this._boundaryType;
+    const bp = this._boundaryParam;
+    if (bt === 'normal' || !bp) return vec;
+
+    const out = { ...vec };
+    const baseSeed = Math.floor((this.states.energy.level + this.states.information.level + this.states.repair.level) * 1e6);
+    let jitterIdx = 0;
+
+    if (bt === 'competitive_energy') {
+      // Energy direction: boundary param (r) jitter 15%, others jitter 30%
+      out[bp] = jitterAroundRanged(bp, vec[bp], 0.15, baseSeed, jitterIdx++);
+      for (const dim of ['h','d','p','s','gamma','g','nu']) {
+        if (dim !== bp) out[dim] = jitterAroundRanged(dim, vec[dim], 0.30, baseSeed, jitterIdx++);
+      }
+    } else if (bt === 'competitive_info') {
+      // Information direction: boundary param (r) jitter 30%, others jitter 15%
+      out[bp] = jitterAroundRanged(bp, vec[bp], 0.30, baseSeed, jitterIdx++);
+      for (const dim of ['h','d','p','s','gamma','g','nu']) {
+        if (dim !== bp) out[dim] = jitterAroundRanged(dim, vec[dim], 0.15, baseSeed, jitterIdx++);
+      }
+    } else if (bt === 'false_energy') {
+      // Energy direction: boundary param (d) = pure random
+      out[bp] = clampToRange(bp, hash01(baseSeed, 99));
+    } else if (bt === 'false_repair') {
+      // Repair direction: boundary param (d) = inverse-reciprocal weighted from stress center
+      const stressCenter = this.states.repair.stress;
+      out[bp] = clampToRange(bp, inverseReciprocalDeterministic(stressCenter, baseSeed));
+    }
+
+    return out;
+  }
+
+  // Generate 5 tiles based on attractors and homeostasis blueprint
+  generateTiles(profile) {
+    if (!this.statesInitialized || profile) {
+      this.updateStates(profile);
+      this.statesInitialized = true;
+    }
+
+    const tiles = [];
+
+    // 3-phase tile generation (universe-prose.md:3442-3444):
+    //   release = 1st function forward, stress_growth = 2nd + blood+1, extreme_growth = 4th reverse
+    const phases = tilePhaseRules(this._homeostasisVec('energy'), profile);
+
+    const tileDefs = [
+      { id: 'release', name: 'Release', attractor: 'energy', type: 'release', primary: 'energy',
+        desc: '주기능(1st) 정방향 — 해소', phaseVec: phases.release },
+      { id: 'stress_growth', name: 'Stress Growth', attractor: 'information', type: 'stress_growth', primary: 'information',
+        desc: '보조기능(2nd) + blood+1 — 성장', phaseVec: phases.stress_growth },
+      { id: 'extreme_growth', name: 'Extreme Growth', attractor: 'repair', type: 'extreme_growth', primary: 'repair',
+        desc: '열등기능(4th) 역방향 — 극한', phaseVec: phases.extreme_growth },
+      { id: 'air_cavity_discharge', name: null, attractor: 'interface', type: null, primary: 'interface',
+        desc: null, phaseVec: null },
+      { id: 'carbon_integration', name: 'Carbon Sync', attractor: 'integration', type: null, primary: 'integration',
+        desc: null, phaseVec: null }
+    ];
+
+    for (const def of tileDefs) {
+      let vec = def.phaseVec || this._homeostasisVec(def.primary);
+
+      // Air cavity tile: use cavity pressures for boundary dims
+      if (def.attractor === 'interface') {
+        const maxPressure = Math.max(this.states.airCavities.upper.pressure, this.states.airCavities.lower.pressure);
+        const isDischarging = maxPressure > 0.7;
+        vec = {
+          r: clampToRange('r', this.states.airCavities.upper.pressure),
+          d: clampToRange('d', this.states.airCavities.lower.pressure),
+          p: isDischarging ? clampToRange('p', 1 - this.states.repair.level) : clampToRange('p', this.states.repair.level),
+          s: isDischarging ? clampToRange('s', 1 - this.states.information.stress) : clampToRange('s', this.states.information.stress),
+          g: clampToRange('g', this.states.carbon.sync),
+          h: clampToRange('h', this.states.information.level),
+          nu: clampToRange('nu', this.states.carbon.rewrite),
+          gamma: clampToRange('gamma', this.states.energy.stress)
+        };
+        def.name = isDischarging ? 'Cavity Discharge' : 'Cavity Maintenance';
+        def.type = isDischarging ? 'discharge' : 'maintenance';
+        def.desc = isDischarging ? 'Active friction discharge via succinate_dehydrogenase' : 'Passive cavity monitoring';
+      }
+
+      // Carbon integration tile: check sync level
+      if (def.attractor === 'integration') {
+        def.type = this.states.carbon.sync > 0.7 ? 'synchronized' : 'resynchronizing';
+        def.desc = this.states.carbon.sync > 0.7 ? '3-attractor phase coherence achieved' : 'Carbon rewrite in progress';
+      }
+
+      // Apply boundary-type overrides for all tiles
+      vec = this._applyBoundaryOverride(vec, def.primary);
+
+      tiles.push({
+        id: def.id,
+        name: def.name,
+        attractor: def.attractor,
+        type: def.type,
+        vec,
+        description: def.desc
+      });
+    }
+
+    return tiles;
+  }
+
+  // Update attractor states based on played tile
+  updateFromPlayedTile(tile) {
+    switch (tile.attractorType || tile.attractor) {
+      case 'energy':
+        this.states.energy.stress = Math.max(0, this.states.energy.stress - 0.2);
+        this.states.energy.level = Math.min(1, this.states.energy.level + 0.2);
+        break;
+      case 'information':
+        this.states.information.stress = Math.max(0, this.states.information.stress - 0.15);
+        this.states.information.level = Math.min(1, this.states.information.level + 0.15);
+        break;
+      case 'repair':
+        this.states.repair.stress = Math.max(0, this.states.repair.stress - 0.15);
+        this.states.repair.level = Math.min(1, this.states.repair.level + 0.15);
+        break;
+      case 'interface':
+        this.states.airCavities.upper.pressure = Math.max(0, this.states.airCavities.upper.pressure - 0.3);
+        this.states.airCavities.lower.pressure = Math.max(0, this.states.airCavities.lower.pressure - 0.3);
+        break;
+      case 'integration':
+        this.states.carbon.sync = Math.min(1, this.states.carbon.sync + 0.2);
+        this.states.carbon.rewrite = (this.states.carbon.rewrite + 0.1) % 1;
+        break;
+    }
+
+    this.applyCrossEffects(tile);
+    this.naturalRecovery();
+  }
+
+  applyCrossEffects(tile) {
+    const { vec } = tile;
+    if (!vec) return;
+
+    if (vec.r > 0.7) {
+      this.states.energy.stress = Math.min(1, this.states.energy.stress + 0.05);
+    }
+    if (vec.h > 0.7) {
+      this.states.information.stress = Math.min(1, this.states.information.stress + 0.05);
+    }
+    if (vec.d > 0.7) {
+      this.states.repair.stress = Math.min(1, this.states.repair.stress + 0.05);
+    }
+
+    const avgLevel = (this.states.energy.level + this.states.information.level + this.states.repair.level) / 3;
+    this.states.carbon.sync = avgLevel;
+  }
+
+  naturalRecovery() {
+    const recoveryRate = 0.01;
+    this.states.energy.stress += (0.5 - this.states.energy.stress) * recoveryRate;
+    this.states.energy.level = 1 - this.states.energy.stress;
+    this.states.information.stress += (0.5 - this.states.information.stress) * recoveryRate;
+    this.states.information.level = 1 - this.states.information.stress;
+    this.states.repair.stress += (0.5 - this.states.repair.stress) * recoveryRate;
+    this.states.repair.level = 1 - this.states.repair.stress;
+  }
+
+  getStates() {
+    return { ...this.states };
+  }
+}

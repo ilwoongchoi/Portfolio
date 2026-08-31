@@ -1,0 +1,280 @@
+// ─────────────────────────────────────────────────────────────
+// autoplay.js — Hypnosis-mode continuous streamer with
+// Bayesian tile-picking calibration (no user-visible criteria).
+//
+// Flow:
+//   1. Tap orb → 8-pad calibration begins (4-6 rounds).
+//   2. Each round: 8 sound pads chosen by max-info-gain over
+//      posterior of 4096 (profile × layer × phaseOffset × friction)
+//      hypotheses. User plays and taps favorites → next round pads
+//      adapt to remaining hypotheses.
+//   3. When posterior collapses → autoplay uses inferred hypothesis.
+//   4. Orb pulses = playing. Tap orb again to pause. Tiny
+//      "recalibrate" link if user wants to redo.
+//
+// Zero labels shown. Time / location never asked; phaseOffset is
+// inferred jointly with profile from the pick trajectory.
+// ─────────────────────────────────────────────────────────────
+import { AudioEngine } from './audio.js';
+import { AttractorTileSystem } from './attractor_tiles.js';
+import { HybridTileScheduler } from './hybrid_scheduler.js';
+import { BayesCalibrator, DIMS } from './calibration_bayes.js';
+
+// ── Persistence ─────────────────────────────────────────────
+const PROFILE_KEY = 'autoplay_hypothesis_v2';
+function saveHypothesis(H) { try { localStorage.setItem(PROFILE_KEY, JSON.stringify(H)); } catch(e){} }
+function loadHypothesis() { try { const r = localStorage.getItem(PROFILE_KEY); return r ? JSON.parse(r) : null; } catch(e){ return null; } }
+
+// ── Engine ─────────────────────────────────────────────────
+const engine = new AudioEngine();
+const attractorSystem = new AttractorTileSystem();
+const scheduler = new HybridTileScheduler(attractorSystem);
+const PAD_COLORS = ['#e88', '#8e8', '#88e', '#ee8', '#e8e', '#8ee', '#eee', '#a8f'];
+
+// ── App state ──────────────────────────────────────────────
+let mode = 'orb-start';   // 'orb-start' | 'calib' | 'autoplay'
+let inferredHypothesis = loadHypothesis();
+let previousTile = null;
+let sessionSeed = 0;
+let currentTimeoutId = null;
+let playing = false;
+
+let calibrator = null;
+let currentRoundTiles = null;
+let currentPicks = [];
+let padPlayingIdx = -1;
+let previewStopFn = null;
+
+// ── Utility: current circadian slot ─────────────────────────
+function currentSlot(hypothesis, now = new Date()) {
+  const offset = hypothesis?.phaseOffset ?? 0;
+  const hr = (now.getUTCHours() + offset) % 24;
+  const minutes = hr * 60 + now.getMinutes();
+  return Math.floor(minutes / (1440 / 128)) + 1;
+}
+function phaseOwnerForSlot(slot) {
+  if (slot <= 16)  return { blood:'AB', phase:'Discharge',   peak:['p','s','nu'],   distant:['g','gamma'] };
+  if (slot <= 48)  return { blood:'A',  phase:'Accumulate',  peak:['g','gamma'],    distant:['p','nu']    };
+  if (slot <= 80)  return { blood:'O',  phase:'Accumulate',  peak:['r','d'],        distant:['nu','gamma']};
+  if (slot <= 112) return { blood:'B',  phase:'Accumulate',  peak:['h','d'],        distant:['nu','p']    };
+  return             { blood:'AB', phase:'Accumulate',  peak:['nu','gamma'],   distant:['r','d']     };
+}
+
+// ── Calibration flow ───────────────────────────────────────
+function startCalibration() {
+  document.getElementById('stage-orb').style.display = 'none';
+  document.getElementById('stage-calib').style.display = 'flex';
+  document.getElementById('recalibrate').style.display = 'none';
+  calibrator = new BayesCalibrator();
+  renderCalibRound();
+}
+
+function renderCalibRound() {
+  stopPadPreview();
+  const info = document.getElementById('calib-info');
+  const padsEl = document.getElementById('pads');
+  const nextBtn = document.getElementById('cb-next');
+  const nextRoundNum = (calibrator?.round || 0) + 1;
+  // Show "thinking" immediately so user knows something is happening
+  info.textContent = `round ${nextRoundNum} · preparing ${'●'.repeat(nextRoundNum)}${'○'.repeat(6 - nextRoundNum)}`;
+  padsEl.innerHTML = '';
+  nextBtn.disabled = true;
+  // Defer heavy Bayesian computation so DOM can repaint first
+  setTimeout(() => {
+    currentRoundTiles = calibrator.nextRound();
+    currentPicks = [];
+    info.textContent = `round ${calibrator.round} · listening ${'●'.repeat(calibrator.round)}${'○'.repeat(6 - calibrator.round)}`;
+    padsEl.innerHTML = '';
+    currentRoundTiles.forEach((vec, i) => {
+      const pad = document.createElement('div');
+      pad.className = 'pad';
+      pad.dataset.idx = i;
+      pad.innerHTML = `<div class="pad-shape" style="color:${PAD_COLORS[i]}"></div>`;
+      pad.addEventListener('click', () => onPadTap(i, pad, vec));
+      padsEl.appendChild(pad);
+    });
+    nextBtn.textContent = calibrator.round >= 3 && calibrator.currentEntropy() < 5.5 ? 'finish' : 'continue';
+  }, 30);
+}
+
+function onPadTap(i, padEl, vec) {
+  // First tap → preview. Second tap on same pad → toggle pick. Multi-select allowed.
+  if (padPlayingIdx === i) {
+    // Same pad tapped again → toggle pick
+    const isPicked = padEl.classList.toggle('picked');
+    if (isPicked) currentPicks.push(i);
+    else currentPicks = currentPicks.filter(x => x !== i);
+    document.getElementById('cb-next').disabled = currentPicks.length === 0;
+  } else {
+    // Different pad → play preview
+    playPadPreview(i, vec, padEl);
+  }
+}
+
+function playPadPreview(i, vec, padEl) {
+  stopPadPreview();
+  padPlayingIdx = i;
+  padEl.classList.add('playing');
+  const midi = vec._midi ?? (60 + ((i * 5) % 12) - 6);
+  const duration = 8.0; // long enough to establish groove/mood + chord progression
+  // Determine attractor from archetype name for chord progression
+  const name = vec._name || '';
+  let attractor = 'energy';
+  if (name.includes('ambient') || name.includes('drone') || name.includes('witch')) attractor = 'repair';
+  else if (name.includes('jazz') || name.includes('idm') || name.includes('noise')) attractor = 'information';
+  else if (name.includes('cinematic') || name.includes('post_rock') || name.includes('shoegaze')) attractor = 'interface';
+  else if (name.includes('baroque') || name.includes('boards') || name.includes('neo')) attractor = 'integration';
+  // Infer abo/gender from archetype for scale + rhythm emphasis
+  const abo = name.includes('female') ? 'O' : name.includes('hip_hop') ? 'B' : name.includes('baroque') ? 'A' : name.includes('idm') ? 'AB' : 'O';
+  const gender = name.includes('female') ? 'F' : 'M';
+  const tile = { vec, id: 'preview-' + i, midi, timestamp: sessionSeed + i * 1000, attractor, abo, gender };
+  engine.playTile(tile, engine.now() + 0.03, duration);
+  previewStopFn = setTimeout(() => {
+    padEl.classList.remove('playing');
+    padPlayingIdx = -1;
+  }, duration * 1000 + 300);
+}
+function stopPadPreview() {
+  if (previewStopFn) { clearTimeout(previewStopFn); previewStopFn = null; }
+  document.querySelectorAll('.pad.playing').forEach(el => el.classList.remove('playing'));
+  engine.stopAll();
+  padPlayingIdx = -1;
+}
+
+document.getElementById('cb-next').addEventListener('click', () => {
+  if (!currentPicks.length) return;
+  calibrator.submitPicks(currentRoundTiles, currentPicks);
+  if (calibrator.isDone()) {
+    finishCalibration();
+  } else {
+    renderCalibRound();
+  }
+});
+
+document.getElementById('cb-skip').addEventListener('click', () => {
+  // Skip round without picks → still consumes a round to move forward
+  if (calibrator.round >= 3) { finishCalibration(); return; }
+  renderCalibRound();
+});
+
+function finishCalibration() {
+  stopPadPreview();
+  const result = calibrator.finalize();
+  inferredHypothesis = result.hypothesis;
+  saveHypothesis(inferredHypothesis);
+  document.getElementById('stage-calib').style.display = 'none';
+  document.getElementById('stage-orb').style.display = 'flex';
+  document.getElementById('recalibrate').style.display = 'block';
+  document.getElementById('hint').textContent = 'tap to begin';
+  // Immediately start autoplay
+  startAutoplay();
+}
+
+// ── Autoplay tile generator ─────────────────────────────────
+function nextTile() {
+  const H = inferredHypothesis;
+  const slot = currentSlot(H);
+  const phase = phaseOwnerForSlot(slot);
+  const now = new Date();
+
+  // Build profile object for HybridScheduler (uses inferred H fields)
+  const profile = { mbti: H.mbti, blood: H.blood, gender: H.gender, rhLayer: H.layer };
+  attractorSystem.updateStates(profile);
+  const scheduled = scheduler.generateScheduledTile(profile, now, previousTile, slot);
+  let vec = { ...scheduled.vec };
+
+  // Circadian peak/distant modulation
+  const B = 1.35, A = 0.55;
+  phase.peak.forEach(d => { if (d in vec) vec[d] = Math.min(1, vec[d] * B); });
+  phase.distant.forEach(d => { if (d in vec) vec[d] = Math.max(0, vec[d] * A); });
+
+  // Friction from inferred hypothesis (not assumed from MBTI+Blood — inferred directly)
+  const jitterAmt = H.friction === 'hold' ? 0.30 : 0.15;
+  const seed = sessionSeed + slot * 31 + (previousTile?.slot || 0);
+  const jitter = (i) => {
+    const x = Math.sin(seed * 12.9898 + i * 78.233) * 43758.5453;
+    return (x - Math.floor(x)) * 2 - 1;
+  };
+  ['r','d','s','h'].forEach((d, i) => {
+    if (d in vec) vec[d] = Math.max(0, Math.min(1, vec[d] + jitter(i) * jitterAmt));
+  });
+
+  // LayerB inversion for Mirror/Block tile
+  if (scheduled.schedulingType === 'spatial_neighbor') {
+    ['h','s','r'].forEach(d => { if (d in vec) vec[d] = 1 - vec[d]; });
+  }
+  // Laterite skin buffer residue
+  if (previousTile?.vec?.s !== undefined) {
+    vec.s = Math.min(1, vec.s * 0.85 + previousTile.vec.s * 0.15);
+  }
+
+  const baseMidi = 60 + (phase.phase === 'Discharge' ? 4 : -3) + Math.floor((vec.p - 0.5) * 6);
+  const duration = 12 + Math.round(vec.p * 12);
+
+  const tileId = sessionSeed + slot * 31 + (previousTile?.slot || 0);
+  return {
+    id: tileId,
+    slot, phase: phase.phase, vec, midi: baseMidi, duration,
+    schedulingType: scheduled.schedulingType,
+    attractorType: scheduled.attractorType,
+    timestamp: tileId
+  };
+}
+
+function scheduleNext(delaySec = 0) {
+  if (!playing) return;
+  const tile = nextTile();
+  const startAt = engine.now() + Math.max(0.05, delaySec);
+  engine.playTile(tile, startAt, tile.duration);
+  attractorSystem.updateFromPlayedTile?.(tile);
+  previousTile = tile;
+  updateStatus(tile);
+  currentTimeoutId = setTimeout(() => scheduleNext(0), Math.max(500, (tile.duration - 0.2) * 1000));
+}
+
+function startAutoplay() {
+  if (playing) return;
+  playing = true;
+  sessionSeed = (inferredHypothesis?.mbti?.charCodeAt(0) || 65) * 1000 + (inferredHypothesis?.phaseOffset || 0) * 100 + Math.floor(Object.keys(inferredHypothesis || {}).length * 137);
+  previousTile = null;
+  document.getElementById('orb').classList.add('playing');
+  document.getElementById('hint').textContent = 'tap to pause';
+  scheduleNext(0);
+}
+function stopAutoplay() {
+  playing = false;
+  if (currentTimeoutId) { clearTimeout(currentTimeoutId); currentTimeoutId = null; }
+  engine.stopAll();
+  document.getElementById('orb').classList.remove('playing');
+  document.getElementById('hint').textContent = 'tap';
+  updateStatus(null);
+}
+
+function updateStatus(tile) {
+  const el = document.getElementById('status');
+  if (!tile) { el.textContent = ''; return; }
+  el.textContent = `${tile.schedulingType || '·'} · slot ${tile.slot}`;
+}
+
+// ── Orb click ──────────────────────────────────────────────
+document.getElementById('orb').addEventListener('click', () => {
+  if (!inferredHypothesis) {
+    startCalibration();
+    return;
+  }
+  if (playing) stopAutoplay(); else startAutoplay();
+});
+
+// ── Recalibrate link ───────────────────────────────────────
+document.getElementById('recalibrate').addEventListener('click', () => {
+  if (playing) stopAutoplay();
+  inferredHypothesis = null;
+  try { localStorage.removeItem(PROFILE_KEY); } catch(e){}
+  startCalibration();
+});
+
+// ── Init ───────────────────────────────────────────────────
+if (inferredHypothesis) {
+  document.getElementById('recalibrate').style.display = 'block';
+  document.getElementById('hint').textContent = 'tap to begin';
+}

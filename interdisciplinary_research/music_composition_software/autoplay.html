@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' file:;">
+<title>Ambient</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%; width: 100%;
+    background: #07070f; color: #ddd;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    user-select: none;
+  }
+
+  /* ── stage 1: orb (start screen + autoplay screen) ── */
+  #stage-orb {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  #orb {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #4a4a8a, #1a1a3a 60%, #050510 100%);
+    box-shadow: 0 0 60px rgba(80, 80, 200, 0.35);
+    cursor: pointer;
+    transition: transform 0.6s ease;
+  }
+  #orb.playing {
+    animation: breathe 4.5s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(80, 80, 200, 0.35); }
+    50% { transform: scale(1.06); box-shadow: 0 0 100px rgba(120, 120, 240, 0.55); }
+  }
+  #hint {
+    font-size: 12px; color: #555; letter-spacing: 4px;
+    text-transform: uppercase; margin-top: 32px;
+  }
+
+  /* ── stage 2: calibration pads ── */
+  #stage-calib {
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px;
+  }
+  #calib-info {
+    font-size: 11px; color: #555; letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  #pads {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 640px;
+    width: 100%;
+  }
+  .pad {
+    width: 140px; height: 140px;
+    border-radius: 20px;
+    background: radial-gradient(circle at 40% 30%, #2a2a4a, #0a0a1a 70%);
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pad:hover { transform: scale(1.03); }
+  .pad.picked {
+    box-shadow: 0 0 30px rgba(150, 150, 255, 0.7), inset 0 0 20px rgba(150, 150, 255, 0.2);
+    background: radial-gradient(circle at 40% 30%, #5a5a9a, #1a1a3a 70%);
+  }
+  .pad-shape {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.7;
+    filter: blur(2px);
+  }
+  .pad.playing .pad-shape { animation: pulse 0.8s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.4); opacity: 1; }
+  }
+  #calib-controls {
+    margin-top: 32px; display: flex; gap: 12px;
+  }
+  .cbtn {
+    padding: 10px 24px;
+    background: #1a1a2e; color: #999; border: 1px solid #2a2a3e;
+    border-radius: 8px; cursor: pointer; font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; font-family: inherit;
+  }
+  .cbtn:hover { background: #2a2a3e; color: #ddd; }
+  .cbtn.primary {
+    background: #4a4a8a; color: #fff; border-color: #4a4a8a;
+  }
+  .cbtn.primary:hover { background: #5a5aaa; border-color: #5a5aaa; }
+  .cbtn:disabled {
+    opacity: 0.3; cursor: not-allowed;
+  }
+
+  /* ── stage 3: subtle status during autoplay ── */
+  #status {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    color: #2a2a3a; font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  }
+  #recalibrate {
+    position: fixed; bottom: 20px; right: 24px;
+    color: #333; font-size: 10px; letter-spacing: 2px;
+    cursor: pointer;
+  }
+  #recalibrate:hover { color: #666; }
+</style>
+</head>
+<body>
+<div id="status"></div>
+
+<div id="stage-orb">
+  <div id="orb"></div>
+  <div id="hint">tap</div>
+</div>
+
+<div id="stage-calib">
+  <div id="calib-info"></div>
+  <div id="pads"></div>
+  <div id="calib-controls">
+    <button class="cbtn" id="cb-skip" title="skip round">⤳</button>
+    <button class="cbtn primary" id="cb-next" disabled>continue</button>
+  </div>
+</div>
+
+<div id="recalibrate" style="display:none">recalibrate</div>
+
+<script type="module" src="autoplay.js"></script>
+</body>
+</html>

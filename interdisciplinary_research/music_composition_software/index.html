@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' file:;">
+<title>Tile Vector Skeleton — Testbed</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <h1>8D Tile Vector Skeleton — Manual Test Bench</h1>
+    <button id="add-tile-btn">+ Add Tile</button>
+    <button id="play-btn">▶ Play All</button>
+    <button id="stop-btn">■ Stop</button>
+  </div>
+  <div id="calibration-panel">
+    <div class="calib-info">
+      <span id="calib-summary">Sessions: 0 | Tiles: 0 | Inferred Layer: —</span>
+    </div>
+    <button id="calib-apply-btn">Apply Calibration</button>
+    <button id="calib-reset-btn">Reset Data</button>
+  </div>
+  <div id="timeline-wrap">
+    <canvas id="timeline-canvas" width="1200" height="180"></canvas>
+  </div>
+  <div id="main">
+    <div id="tile-list"></div>
+  </div>
+</div>
+
+<!-- Calibration Modal -->
+<div id="calib-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:1000; align-items:center; justify-content:center;">
+  <div id="calib-content" style="background:#1a1a2e; border-radius:8px; padding:24px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto;">
+    <h2 style="color:#ddd; margin-bottom:16px;">Sound Calibration</h2>
+    <div id="calib-progress" style="color:#999; margin-bottom:20px;">Round 1 of 3: Temperament</div>
+    <div id="calib-round1" class="calib-round">
+      <div class="calib-grid">
+        <div class="calib-pad" data-value="NF" data-round="1">
+          <div class="pad-label">NF</div>
+          <div class="pad-desc">Warm, Idealistic</div>
+        </div>
+        <div class="calib-pad" data-value="NT" data-round="1">
+          <div class="pad-label">NT</div>
+          <div class="pad-desc">Cool, Analytical</div>
+        </div>
+        <div class="calib-pad" data-value="SJ" data-round="1">
+          <div class="pad-label">SJ</div>
+          <div class="pad-desc">Stable, Structured</div>
+        </div>
+        <div class="calib-pad" data-value="SP" data-round="1">
+          <div class="pad-label">SP</div>
+          <div class="pad-desc">Spontaneous, Free</div>
+        </div>
+      </div>
+    </div>
+    <div id="calib-round2" class="calib-round" style="display:none;">
+      <div class="calib-grid">
+        <div class="calib-pair">
+          <div class="calib-pad" data-value="I" data-round="2">
+            <div class="pad-label">I</div>
+            <div class="pad-desc">Introvert</div>
+          </div>
+          <div class="calib-pad" data-value="E" data-round="2">
+            <div class="pad-label">E</div>
+            <div class="pad-desc">Extrovert</div>
+          </div>
+        </div>
+        <div class="calib-pair">
+          <div class="calib-pad" data-value="N" data-round="2">
+            <div class="pad-label">N</div>
+            <div class="pad-desc">Intuition</div>
+          </div>
+          <div class="calib-pad" data-value="S" data-round="2">
+            <div class="pad-label">S</div>
+            <div class="pad-desc">Sensing</div>
+          </div>
+        </div>
+        <div class="calib-pair">
+          <div class="calib-pad" data-value="T" data-round="2">
+            <div class="pad-label">T</div>
+            <div class="pad-desc">Thinking</div>
+          </div>
+          <div class="calib-pad" data-value="F" data-round="2">
+            <div class="pad-label">F</div>
+            <div class="pad-desc">Feeling</div>
+          </div>
+        </div>
+        <div class="calib-pair">
+          <div class="calib-pad" data-value="P" data-round="2">
+            <div class="pad-label">P</div>
+            <div class="pad-desc">Perceiving</div>
+          </div>
+          <div class="calib-pad" data-value="J" data-round="2">
+            <div class="pad-label">J</div>
+            <div class="pad-desc">Judging</div>
+          </div>
+        </div>
+        <div class="calib-pair">
+          <div class="calib-pad" data-value="M" data-round="2">
+            <div class="pad-label">M</div>
+            <div class="pad-desc">Male</div>
+          </div>
+          <div class="calib-pad" data-value="Fe" data-round="2">
+            <div class="pad-label">Fe</div>
+            <div class="pad-desc">Female</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="calib-round3" class="calib-round" style="display:none;">
+      <div class="calib-grid">
+        <div class="calib-pad" data-value="O" data-round="3">
+          <div class="pad-label">O</div>
+          <div class="pad-desc">Archetype</div>
+        </div>
+        <div class="calib-pad" data-value="A" data-round="3">
+          <div class="pad-label">A</div>
+          <div class="pad-desc">Structured</div>
+        </div>
+        <div class="calib-pad" data-value="B" data-round="3">
+          <div class="pad-label">B</div>
+          <div class="pad-desc">Experimental</div>
+        </div>
+        <div class="calib-pad" data-value="AB" data-round="3">
+          <div class="pad-label">AB</div>
+          <div class="pad-desc">Hybrid</div>
+        </div>
+      </div>
+    </div>
+    <div id="calib-round4" class="calib-round" style="display:none;">
+      <div class="calib-grid">
+        <div class="calib-pad" data-value="A" data-round="4">
+          <div class="pad-label">Layer A</div>
+          <div class="pad-desc">Self (aa rh+)</div>
+        </div>
+        <div class="calib-pad" data-value="B" data-round="4">
+          <div class="pad-label">Layer B</div>
+          <div class="pad-desc">Temperament (aa rh-)</div>
+        </div>
+        <div class="calib-pad" data-value="C" data-round="4">
+          <div class="pad-label">Layer C</div>
+          <div class="pad-desc">Blood+1 (ao rh+)</div>
+        </div>
+        <div class="calib-pad" data-value="D" data-round="4">
+          <div class="pad-label">Layer D</div>
+          <div class="pad-desc">Temperament+Blood+1 (ao rh-)</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:24px; display:flex; gap:12px; justify-content:flex-end;">
+      <button id="calib-prev" style="display:none; padding:8px 16px; background:#333; color:#fff; border:none; border-radius:4px; cursor:pointer;">Previous</button>
+      <button id="calib-next" style="padding:8px 16px; background:#6a6acc; color:#fff; border:none; border-radius:4px; cursor:pointer;">Next</button>
+      <button id="calib-finish" style="display:none; padding:8px 16px; background:#5dba5d; color:#fff; border:none; border-radius:4px; cursor:pointer;">Finish</button>
+      <button id="calib-cancel" style="padding:8px 16px; background:#666; color:#fff; border:none; border-radius:4px; cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
