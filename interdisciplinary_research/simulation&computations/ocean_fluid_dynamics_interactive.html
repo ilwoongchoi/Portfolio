@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Fluid Dynamics - Interactive Visualization</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1a3a5a 100%);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #00bcd4;
+        }
+        
+        .header h1 {
+            color: #00bcd4;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+        }
+        
+        .header p {
+            color: #b0bec5;
+            font-size: 1.1em;
+        }
+        
+        .controls {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #00bcd4;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .control-group label {
+            font-size: 0.9em;
+            color: #00bcd4;
+            font-weight: bold;
+        }
+        
+        button {
+            background: #00bcd4;
+            color: #0a1929;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #00acc1;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        input[type="range"] {
+            width: 200px;
+            cursor: pointer;
+        }
+        
+        select {
+            background: #1a3a5a;
+            color: #e0e0e0;
+            border: 1px solid #00bcd4;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .visualization-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .viz-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #00bcd4;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 0 20px rgba(0, 188, 212, 0.3);
+        }
+        
+        .viz-panel h2 {
+            color: #00bcd4;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .viz-panel.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        #plot3d {
+            width: 100%;
+            height: 600px;
+        }
+        
+        #plot2d {
+            width: 100%;
+            height: 500px;
+        }
+        
+        #vectorField {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #00bcd4;
+            background: #0a1929;
+        }
+        
+        .stats-panel {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px;
+            border: 1px solid #00bcd4;
+        }
+        
+        .stats-panel h3 {
+            color: #00bcd4;
+            margin-bottom: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: rgba(0, 188, 212, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #00bcd4;
+        }
+        
+        .stat-item label {
+            color: #b0bec5;
+            font-size: 0.9em;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-item value {
+            color: #00bcd4;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 1200px) {
+            .visualization-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌊 Ocean Fluid Dynamics Visualization</h1>
+        <p>Interactive 3D representation of 57,906,500 water molecules and their fluid dynamics</p>
+    </div>
+    
+    <div class="controls">
+        <div class="control-group">
+            <label>Animation Speed</label>
+            <input type="range" id="speedSlider" min="0" max="100" value="50">
+            <span id="speedValue">50%</span>
+        </div>
+        
+        <div class="control-group">
+            <label>Time Step</label>
+            <input type="range" id="timeSlider" min="0" max="100" value="0">
+            <span id="timeValue">0</span>
+        </div>
+        
+        <div class="control-group">
+            <label>View Mode</label>
+            <select id="viewMode">
+                <option value="3d">3D Flow</option>
+                <option value="pressure">Pressure Field</option>
+                <option value="velocity">Velocity Vectors</option>
+                <option value="turbulence">Turbulence</option>
+                <option value="vorticity">Vorticity</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label>Color Scheme</label>
+            <select id="colorScheme">
+                <option value="ocean">Ocean Blue</option>
+                <option value="thermal">Thermal</option>
+                <option value="phase">Phase (LIGHT/SHADOW)</option>
+                <option value="depth">Depth Gradient</option>
+            </select>
+        </div>
+        
+        <button id="playPauseBtn">▶ Play</button>
+        <button id="resetBtn">Reset</button>
+        <button id="exportBtn">Export Image</button>
+    </div>
+    
+    <div class="stats-panel">
+        <h3>📊 Statistics</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <label>Total Molecules</label>
+                <value id="totalMolecules">Loading...</value>
+            </div>
+            <div class="stat-item">
+                <label>Velocity Range</label>
+                <value id="velocityRange">Loading...</value>
+            </div>
+            <div class="stat-item">
+                <label>Pressure Range</label>
+                <value id="pressureRange">Loading...</value>
+            </div>
+            <div class="stat-item">
+                <label>Current Time</label>
+                <value id="currentTime">0.0s</value>
+            </div>
+        </div>
+    </div>
+    
+    <div class="visualization-container">
+        <div class="viz-panel full-width">
+            <h2>3D Ocean Fluid Dynamics</h2>
+            <div id="plot3d"></div>
+        </div>
+        
+        <div class="viz-panel">
+            <h2>2D Flow Field (Top View)</h2>
+            <div id="plot2d"></div>
+        </div>
+        
+        <div class="viz-panel">
+            <h2>Vector Field Visualization</h2>
+            <canvas id="vectorField"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        let molecules = [];
+        let stats = {};
+        let animationId = null;
+        let isPlaying = false;
+        let currentTime = 0;
+        let timeStep = 0;
+        
+        // Load data
+        async function loadData() {
+            try {
+                const response = await fetch('ocean_fluid_dynamics_data.json');
+                const data = await response.json();
+                molecules = data.molecules;
+                stats = data.stats;
+                
+                updateStats();
+                initializeVisualizations();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.body.innerHTML = '<div style="padding: 50px; text-align: center; color: red;"><h1>Error Loading Data</h1><p>Please ensure ocean_fluid_dynamics_data.json is in the same directory.</p></div>';
+            }
+        }
+        
+        function updateStats() {
+            document.getElementById('totalMolecules').textContent = stats.total_molecules.toLocaleString();
+            document.getElementById('velocityRange').textContent = 
+                `${stats.velocity_range[0].toFixed(2)} - ${stats.velocity_range[1].toFixed(2)} m/s`;
+            document.getElementById('pressureRange').textContent = 
+                `${(stats.pressure_range[0]/1000).toFixed(1)} - ${(stats.pressure_range[1]/1000).toFixed(1)} kPa`;
+        }
+        
+        function initializeVisualizations() {
+            update3DPlot();
+            update2DPlot();
+            initializeVectorField();
+        }
+        
+        function update3DPlot() {
+            const viewMode = document.getElementById('viewMode').value;
+            const colorScheme = document.getElementById('colorScheme').value;
+            
+            // Sample for performance
+            const sampleSize = Math.min(10000, molecules.length);
+            const step = Math.floor(molecules.length / sampleSize);
+            const sampled = molecules.filter((_, i) => i % step === 0);
+            
+            let colors, colorbarTitle;
+            let zValues = sampled.map(m => m.z);
+            
+            switch(viewMode) {
+                case 'pressure':
+                    zValues = sampled.map(m => m.pressure);
+                    colorbarTitle = 'Pressure (Pa)';
+                    break;
+                case 'velocity':
+                    zValues = sampled.map(m => m.velocity_magnitude);
+                    colorbarTitle = 'Velocity (m/s)';
+                    break;
+                case 'turbulence':
+                    zValues = sampled.map(m => m.turbulence);
+                    colorbarTitle = 'Turbulence';
+                    break;
+                case 'vorticity':
+                    zValues = sampled.map(m => m.vorticity);
+                    colorbarTitle = 'Vorticity';
+                    break;
+                default:
+                    zValues = sampled.map(m => m.depth);
+                    colorbarTitle = 'Depth';
+            }
+            
+            // Apply color scheme
+            switch(colorScheme) {
+                case 'phase':
+                    colors = sampled.map(m => m.phase === 1 ? '#4fc3f7' : '#1976d2');
+                    break;
+                case 'thermal':
+                    colors = zValues;
+                    break;
+                case 'depth':
+                    colors = sampled.map(m => m.depth);
+                    break;
+                default:
+                    colors = sampled.map(m => m.depth);
+            }
+            
+            const x = sampled.map(m => m.x);
+            const y = sampled.map(m => m.y);
+            const z = sampled.map(m => m.z);
+            
+            // Add velocity vectors
+            const u = sampled.map(m => m.velocity[0]);
+            const v = sampled.map(m => m.velocity[1]);
+            const w = sampled.map(m => m.velocity[2]);
+            
+            const trace = {
+                x: x,
+                y: y,
+                z: z,
+                mode: 'markers',
+                type: 'scatter3d',
+                marker: {
+                    size: sampled.map(m => Math.max(2, Math.min(8, m.turbulence * 20))),
+                    color: colors,
+                    colorscale: colorScheme === 'thermal' ? 'Viridis' : 
+                               colorScheme === 'depth' ? 'Blues' : null,
+                    colorbar: {
+                        title: colorbarTitle,
+                        titlefont: {color: '#e0e0e0'},
+                        tickfont: {color: '#e0e0e0'}
+                    },
+                    opacity: 0.7,
+                    line: {width: 0}
+                },
+                name: 'Water Molecules'
+            };
+            
+            const layout = {
+                title: {
+                    text: '3D Ocean Fluid Dynamics',
+                    font: {color: '#e0e0e0', size: 20}
+                },
+                scene: {
+                    xaxis: {title: 'FLUX Position', titlefont: {color: '#e0e0e0'}, backgroundcolor: '#0a1929', gridcolor: '#00bcd4'},
+                    yaxis: {title: 'Depth', titlefont: {color: '#e0e0e0'}, backgroundcolor: '#0a1929', gridcolor: '#00bcd4'},
+                    zaxis: {title: 'TUNNEL', titlefont: {color: '#e0e0e0'}, backgroundcolor: '#0a1929', gridcolor: '#00bcd4'},
+                    bgcolor: '#0a1929',
+                    camera: {
+                        eye: {x: 1.5, y: 1.5, z: 1.5}
+                    }
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: {color: '#e0e0e0'}
+            };
+            
+            Plotly.newPlot('plot3d', [trace], layout, {responsive: true});
+        }
+        
+        function update2DPlot() {
+            const sampleSize = Math.min(5000, molecules.length);
+            const step = Math.floor(molecules.length / sampleSize);
+            const sampled = molecules.filter((_, i) => i % step === 0);
+            
+            const x = sampled.map(m => m.x);
+            const y = sampled.map(m => m.y);
+            const colors = sampled.map(m => m.velocity_magnitude);
+            
+            const trace = {
+                x: x,
+                y: y,
+                mode: 'markers',
+                type: 'scatter',
+                marker: {
+                    size: 5,
+                    color: colors,
+                    colorscale: 'Viridis',
+                    colorbar: {
+                        title: 'Velocity (m/s)',
+                        titlefont: {color: '#e0e0e0'},
+                        tickfont: {color: '#e0e0e0'}
+                    },
+                    opacity: 0.6
+                },
+                name: 'Flow Field'
+            };
+            
+            const layout = {
+                title: {
+                    text: '2D Flow Field (Top View)',
+                    font: {color: '#e0e0e0', size: 16}
+                },
+                xaxis: {title: 'FLUX Position', titlefont: {color: '#e0e0e0'}, gridcolor: '#00bcd4'},
+                yaxis: {title: 'Depth', titlefont: {color: '#e0e0e0'}, gridcolor: '#00bcd4'},
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: {color: '#e0e0e0'}
+            };
+            
+            Plotly.newPlot('plot2d', [trace], layout, {responsive: true});
+        }
+        
+        function initializeVectorField() {
+            const canvas = document.getElementById('vectorField');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            function drawVectorField() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const sampleSize = Math.min(2000, molecules.length);
+                const step = Math.floor(molecules.length / sampleSize);
+                const sampled = molecules.filter((_, i) => i % step === 0);
+                
+                // Normalize positions
+                const xMin = Math.min(...sampled.map(m => m.x));
+                const xMax = Math.max(...sampled.map(m => m.x));
+                const yMin = Math.min(...sampled.map(m => m.y));
+                const yMax = Math.max(...sampled.map(m => m.y));
+                
+                const scaleX = canvas.width / (xMax - xMin);
+                const scaleY = canvas.height / (yMax - yMin);
+                
+                sampled.forEach(m => {
+                    const x = (m.x - xMin) * scaleX;
+                    const y = (m.y - yMin) * scaleY;
+                    
+                    const vx = m.velocity[0] * 5;
+                    const vy = m.velocity[1] * 5;
+                    
+                    // Draw vector
+                    ctx.strokeStyle = `hsl(${180 + m.velocity_magnitude * 20}, 100%, 50%)`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x + vx, y + vy);
+                    ctx.stroke();
+                    
+                    // Draw arrowhead
+                    const angle = Math.atan2(vy, vx);
+                    ctx.beginPath();
+                    ctx.moveTo(x + vx, y + vy);
+                    ctx.lineTo(x + vx - 5 * Math.cos(angle - Math.PI / 6), y + vy - 5 * Math.sin(angle - Math.PI / 6));
+                    ctx.moveTo(x + vx, y + vy);
+                    ctx.lineTo(x + vx - 5 * Math.cos(angle + Math.PI / 6), y + vy - 5 * Math.sin(angle + Math.PI / 6));
+                    ctx.stroke();
+                });
+            }
+            
+            drawVectorField();
+            
+            // Redraw on resize
+            window.addEventListener('resize', () => {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                drawVectorField();
+            });
+        }
+        
+        // Control handlers
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            document.getElementById('speedValue').textContent = e.target.value + '%';
+        });
+        
+        document.getElementById('timeSlider').addEventListener('input', (e) => {
+            timeStep = parseInt(e.target.value);
+            document.getElementById('timeValue').textContent = timeStep;
+            currentTime = timeStep * 0.1;
+            document.getElementById('currentTime').textContent = currentTime.toFixed(1) + 's';
+            update3DPlot();
+        });
+        
+        document.getElementById('viewMode').addEventListener('change', update3DPlot);
+        document.getElementById('colorScheme').addEventListener('change', update3DPlot);
+        
+        document.getElementById('playPauseBtn').addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            document.getElementById('playPauseBtn').textContent = isPlaying ? '⏸ Pause' : '▶ Play';
+            
+            if (isPlaying) {
+                animate();
+            } else {
+                if (animationId) {
+                    cancelAnimationFrame(animationId);
+                }
+            }
+        });
+        
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            timeStep = 0;
+            currentTime = 0;
+            document.getElementById('timeSlider').value = 0;
+            document.getElementById('timeValue').textContent = '0';
+            document.getElementById('currentTime').textContent = '0.0s';
+            update3DPlot();
+        });
+        
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            Plotly.downloadImage('plot3d', {format: 'png', width: 1920, height: 1080, filename: 'ocean_fluid_dynamics'});
+        });
+        
+        function animate() {
+            if (!isPlaying) return;
+            
+            const speed = document.getElementById('speedSlider').value / 100;
+            timeStep = (timeStep + speed) % 101;
+            currentTime = timeStep * 0.1;
+            
+            document.getElementById('timeSlider').value = timeStep;
+            document.getElementById('timeValue').textContent = Math.floor(timeStep);
+            document.getElementById('currentTime').textContent = currentTime.toFixed(1) + 's';
+            
+            // Update visualizations with time-based transformations
+            update3DPlot();
+            
+            animationId = requestAnimationFrame(animate);
+        }
+        
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>
+
