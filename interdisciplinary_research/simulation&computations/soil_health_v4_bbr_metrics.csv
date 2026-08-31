@@ -1,0 +1,8 @@
+Metric,Value
+High_Basin_%,15.0
+Low_Basin_%,0.0
+Boundary_%,25.0
+Residual_%,20.0
+Max_Gradient_Rainfall,0.1
+Max_Gradient_Agri,0.1052631578947368
+Max_Gradient_Coherence,0.7182162224690214
