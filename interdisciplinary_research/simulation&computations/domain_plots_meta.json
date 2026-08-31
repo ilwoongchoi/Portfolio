@@ -1,0 +1,32 @@
+{
+  "in_csv": "analysis_results\\CONSCIOUSNESS_FIELD_128x128_fullX.csv",
+  "out_dir": "analysis_results\\consciousness_domains_128x128",
+  "domain_cols": [
+    "x_00_self",
+    "x_01_economy",
+    "x_02_universe",
+    "x_03_quark_sector",
+    "x_04_gluon_sector",
+    "x_05_neutrino_sector",
+    "x_06_photon_sector",
+    "x_07_electron_sector",
+    "x_08_higgs_sector",
+    "x_09_w_boson_sector",
+    "x_10_z_boson_sector",
+    "x_11_quark_gluon_coupling",
+    "x_12_quark_w_coupling",
+    "x_13_gluon_w_coupling",
+    "x_14_photon_w_coupling",
+    "x_15_photon_electron_coupling",
+    "x_16_neutrino_z_coupling",
+    "x_17_neutrino_electron_coupling",
+    "x_18_w_boson_electron_coupling",
+    "x_19_neutrino_photon_coupling",
+    "x_20_higgs_w_coupling",
+    "x_21_higgs_z_coupling",
+    "x_22_quark_neutrino_coupling",
+    "x_23_quark_electron_coupling"
+  ],
+  "domain_count": 24,
+  "stats_csv": "analysis_results\\consciousness_domains_128x128\\domain_stats.csv"
+}
