@@ -27,11 +27,8 @@ Further Considerations: The current model was rapidly built based on national-le
 <img width="300" height="211" alt="image" src="https://github.com/user-attachments/assets/b1ef065d-47a1-400a-824f-b08c2b3d89d6" />
 <img width="300" height="211" alt="image" src="https://github.com/user-attachments/assets/4fd71cfa-5b9f-412b-8809-7796ced72c69" />
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/8ab413bd-ded4-4cf1-b0d3-6141c4fdb1cc" />
-<img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/848c3724-2bde-4eb1-bd30-e318963f90cc" />
+<img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/19ee5b97-cb3a-4dde-8c3b-817f61fdd576" />
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/eb201587-1feb-4538-87ee-8a4a8ce7fe06" />
-
-
-
 
 
 
