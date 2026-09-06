@@ -74,7 +74,10 @@ As I have already mentioned I participated in a course run by Yorkshire Wildlife
 
 Kaggle_Globular_Cluster_machine_learning
 
-I am greatly interested in using algorithms and ai technology to create art, so I used machine learning models that are known to create AI generated Art such as Stable Diffusion and GAN to make images of synthesised astronomical globular clusters by feeding them thousands of real globular cluster images. Globular clusters are groups of stars in space that are clustered in a ball shape. I could not output final created image because my computer does not have GPU and you need a GPU to run machine learning models stably, but it was great to witness the possibility of AI technology in creating art. (The images on the right are of real globular clusters, not the one I made.)
+I am greatly interested in using algorithms and ai technology to create art, so I used machine learning models that are known to create AI generated Art such as Stable Diffusion and GAN to make images of synthesised astronomical globular clusters by feeding them thousands of real globular cluster images. Globular clusters are groups of stars in space that are clustered in a ball shape. I could not output final created image because my computer does not have GPU and you need a GPU to run machine learning models stably, but it was great to witness the possibility of AI technology in creating art. (The images on the right are of real globular clusters, not the one I made.) <img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/ca5cacf1-c253-43f6-8f92-67a8ec28e202" /><img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/24026d7e-79dc-4f6c-bf2e-ff7012df4078" /><img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/08eb66d5-be84-4593-a98c-139858b3bcfe" />
+
+
+
 
 Interdisciplinary_research
 
