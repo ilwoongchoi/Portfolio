@@ -93,7 +93,9 @@ peatland_intricate.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/inter
 peatland_physics_based.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_physics_based.html
 peatland_rule_based.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_rule_based.html
 planck_morphology_plotly.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/planck_morphology_plotly.html <img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/01efd180-1e32-4c59-847b-e771d846e734" />
-<img width="400" height="357" alt="image" src="https://github.com/user-attachments/assets/503ab7d5-9753-4c33-b33e-2dc78d75d15d" /><img width="400" height="265 alt="image" src="https://github.com/user-attachments/assets/af564c46-7d28-4b06-89e0-5317bab1f91b" /><img width="400" height="108" alt="image" src="https://github.com/user-attachments/assets/c02b596a-d222-4e28-804f-f7fce2a99a6a" /> <img width="400" height="385" alt="image" src="https://github.com/user-attachments/assets/f0b0f14a-7ea6-4267-803c-f4066c791ca4" />
+<img width="400" height="357" alt="image" src="https://github.com/user-attachments/assets/503ab7d5-9753-4c33-b33e-2dc78d75d15d" /><img width="400" height="265 alt="image" src="https://github.com/user-attachments/assets/af564c46-7d28-4b06-89e0-5317bab1f91b" /><img width="400" height="108" alt="image" src="https://github.com/user-attachments/assets/c02b596a-d222-4e28-804f-f7fce2a99a6a" /> <img width="400" height="385" alt="image" src="https://github.com/user-attachments/assets/f0b0f14a-7ea6-4267-803c-f4066c791ca4" /> <img width="400" height="264" alt="image" src="https://github.com/user-attachments/assets/a9879791-df51-4552-a242-89f3c39912c6" />
+
+
 
 
 
