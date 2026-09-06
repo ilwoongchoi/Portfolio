@@ -1,5 +1,5 @@
 # Portfolio
-The portfolio is divided into two halves at large, hobby project and research project. Hobby projects were all made before 2026 while research projects were done mostly from end of 2025 uptil now. Hobby projects were done when I first began to bloom my interest in creative hobbies using IT tools, and researches were done in the synthesis phase of my interests and knowledge. Many of both my hobby projects and my research project data were lost as my laptop broke down but I could retrieve many. Many of the examples are wrong in scientific accuracy because most of these files were made at the beginning stage of my research and also because my scientific knowledge is not perfect, but these are the records of my tireless wrestling with AI and software to understand and model science and natural phenomena. 
+The portfolio is divided into three thirds at large, hobby project, research project and UK National Parks habitat connectivity project. Hobby projects were all made before 2026 while research projects were done mostly from end of 2025 uptil now. And UK National Parks project was the most recent project done specifically for the purpose of portfolio. Hobby projects were done when I first began to bloom my interest in creative hobbies using IT tools, and researches were done in the synthesis phase of my interests and knowledge. Many of both my hobby projects and my research project data were lost as my laptop broke down but I could retrieve many. Many of the examples are wrong in scientific accuracy because most of these files were made at the beginning stage of my research and also because my scientific knowledge is not perfect, but these are the records of my tireless wrestling with AI and software to understand and model science and natural phenomena. Whereas, UK National Parks project showcases my ability to utilise GIS and AI tools to model spatial data and use them for BNG decision making procedures.
 
 Hobby coding Projects
 
@@ -13,7 +13,7 @@ I got the inspiration for this from an appendix of a biogeochemistry book I borr
 
 Puzzles and Games
 
-I am greatly interested in puzzles, 2d and 3d games and military strategy so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, shikaku, futoshiki, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.
+I am greatly interested in puzzles, 2d and 3d games and military strategy so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.
 
 Python_music_library_projects
 One of the reason why python is such a great and versatile language is because the libraries of different functionalities are created and made accessible by so many individual hobbiest and developers. For each field of interest there are so many well known libraries, and mingus and music.py are two of the well known music libraries in Python.I thought mingus was especially interesting because it lets you experiment with music theory and generate algorithmic music through the manipulation of those music theory. I played piano from early age and is greatly interested in different types of music, so I know the power of music theory to resonate with different people. Regardless of that, I think algorithmic generative creativity of not only music but any other discipline is limitless and more people should utilise it, because it lets us tap into creativity.
@@ -26,6 +26,28 @@ Ever since programming and software engineering became a skill that not only IT 
 processing_shader
 
 Processing is an open source generative art tool, along with p5.js. Former is written in c++ and the latter in P5.js, and I think processing lets you be more free in energy and less restrained. Generative coding or generative art is basically making art with the power of algorithmic generation , and I said before , being generative provides a good entrance point to creative endeavours and irregularity. Shader, made well known by animation engineer Inigo Quilez, is a mathematical way of making 3d animation. It uses mathematical vectors and equations to produce moving 3d image, and it is very effective. Although you need a very graphically capable hardware to run it, it is a fun way to get over maths. I used processing a lot in making prototypes of projects before I would move onto Three.js, Python, html etc and processing had also a shader library so I tried making shader with processing, however compared to the well known shadertoy platform, the library was very elementary. Shadertoy was very slow to run on my gpu-less computer, but both platforms are very enjoyable.
+
+python_astronomy_simulations
+
+I am greatly interested in astronomy and some years ago I made python codes that model and predict asteroid encounters with Earth using python libraries such as poliastro and astropy. These were all during the very entrance stages of my interest in modelling and coding when I first started using AI.
+
+GIS_works
+
+Cannae Battle visualisation
+
+I am greatly interested in history and battle tactics, so I once stumbled upon an idea to start a youtube channal that analyses the geometry of battle tactics thar historical military commanders used. The battle of Cannae is a very well known battle of Antiquity that is like a textbook example of a tactical maneuver, and I wanted to make an animation of this maneuver using a QGIS function called temporal controller. At that time I was not very proficient in using different tool within QGIS, but it was good fun to try out new stuff with GIS
+
+BNG Assessment mock.ppt
+
+Last year when I first came to the UK to pursue conservations career and started using GIS for spatial modelling, I was first introduced to the concept of Biodiversity Net Gain and taught myself the essence of the policy by using GIS based data analysis and a macro provided by the UK government. I chose a natural reserve site called Chilterns AONB near Oxford where I live and undertook at home mock BNG assessment of the site using already existing survey data. Because I could not field-survey the site, I had to standardise some post-dev and pre-dev condition scores to a certain value for the assessment to be possible.The assessment was very basic but it was enough to teach myself what BNG is and its meaning in British conservation and ecology industry.
+
+Chilterns Habitat Map.pptx
+
+I acquired  datasets from Natural England Data Portal and overlayed the polygons with the reserve boundaries to make a habitat map of Chilterns in Oxford.I visualised the spatial distribution of different types of habitat patches in the final result.
+
+ywt_peatland_ restoration_practitioner_course.png
+
+As I have already mentioned I participated in a course run by Yorkshire Wildlife Trust for conservation professionals to teach peatland restoration techniques, and there we had off-field computer sessions where we used QGIS to design our peatland restoration management plans. It was interesting to see how GIS tools were used in real conservation and restoration practices.
 
 
 
