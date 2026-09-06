@@ -1,8 +1,14 @@
 # Portfolio
+
+
 The portfolio is divided into three thirds at large, hobby project, research project and UK National Parks habitat connectivity project. Hobby projects were all made before 2026 while research projects were done mostly from end of 2025 uptil now. And UK National Parks project was the most recent project done specifically for the purpose of portfolio. Hobby projects were done when I first began to bloom my interest in creative hobbies using IT tools, and researches were done in the synthesis phase of my interests and knowledge. Many of both my hobby projects and my research project data were lost as my laptop broke down but I could retrieve many. Many of the examples are wrong in scientific accuracy because most of these files were made at the beginning stage of my research and also because my scientific knowledge is not perfect, but these are the records of my tireless wrestling with AI and software to understand and model science and natural phenomena. Whereas, UK National Parks project showcases my ability to utilise GIS and AI tools to model spatial data and use them for BNG decision making procedures.
 
 
+
+
 ## UK National Parks Habitats Connectivity Opportunity Project
+
+
 
 I have designed a pipeline that goes beyond simple GIS tool manipulation, combining the Lawton Report's spatial connectivity principles (250m Buffer) with the unique biogeography of each region. Ancient woodlands are anchored as core anchors to ensure ecosystem permanence, while each national park's unique geology and soil-specific habitats (e.g., Peak District's Blanket Bog, New Forest's Wood Pasture) are set as restoration targets to build a site-specific BNG decision-making model.
 
@@ -15,7 +21,9 @@ A national standard BNG MCDA model has been benchmarked across all national park
 I automated the entire pipeline in Python across all 10 National Parks using an AI agent tool.
 
 
+
 Key features:
+
 
 Statutory ancient woodland core anchoring
 Unique biogeography targeting across England's 10 national parks
@@ -33,9 +41,13 @@ Further Considerations: The current model was rapidly built based on national-le
 
 
 
+
 ## Hobby coding Projects
 
+
 I have included these draft-level hobby projects in this portfolio to showcase my enthusiasm for experimentation and exploration with AI and IT tools and my desire and ability to learn new skills. 
+
+
 
 ### 2d ecosystem simulation
 
@@ -46,11 +58,17 @@ In this project, I tried to make a self sustaining simulative agentic ecosystem 
 
 ### BOX model
 
+
 I got the inspiration for this from an appendix of a biogeochemistry book I borrowed from the library which introduced me to BOX software, a primary modelling software for Biogeochemical modelling. There are many other types such as NPZD, PFT, ESM that are used to model biogeochemistry of ecosystem, but the BOX model was most intuitive and easy to access for a beginner. The complexity of the interaction of whole system was very hard to keep up with
+
+
 
 ### Puzzles and Games
 
-I am greatly interested in puzzles, 2d and 3d games and military strategy so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.<img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/9b95400d-d209-4fb2-a740-06ba1ae2ae49" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/d727aa93-8e8e-4943-820e-b44a19703297" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/186ab7e5-bc41-43be-8a06-63414dc90318" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/18cc0205-f114-48e7-a80c-c6f6f71f5122" />
+I am greatly interested in puzzles, 2d and 3d games and military strategy so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.
+
+<img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/9b95400d-d209-4fb2-a740-06ba1ae2ae49" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/d727aa93-8e8e-4943-820e-b44a19703297" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/186ab7e5-bc41-43be-8a06-63414dc90318" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/18cc0205-f114-48e7-a80c-c6f6f71f5122" />
+
 https://hello.processing.org/display/#@-P0rlGScFGUSRt7REkM7
 
 
@@ -62,12 +80,16 @@ One of the reason why python is such a great and versatile language is because t
 
 ### job_scraping_automation
 
+
 Ever since programming and software engineering became a skill that not only IT professionals but general public could have access to, I saw many people using software to automate everyday tasks, earn money and do financial trading with automation. At first I wasn't really into these, but I began to realise the power of productivity and saving time. These automations allow you to be more efficient and spend less time doing repetitive work. So I thought why don't I also use them for scraping jobs from the internet so I get more chance of employment. I used a python library called selenium which is a well known web-scraping library. Web scraping is a term used to call automated tasks which involves the machine accessing many webpages and searching for and obtaining the information it wants.
 
 
 ### processing_shader
 
-Processing is an open source generative art tool, along with p5.js. Former is written in c++ and the latter in P5.js, and I think processing lets you be more free in energy and less restrained. Generative coding or generative art is basically making art with the power of algorithmic generation , and I said before , being generative provides a good entrance point to creative endeavours and irregularity. Shader, made well known by animation engineer Inigo Quilez, is a mathematical way of making 3d animation. It uses mathematical vectors and equations to produce moving 3d image, and it is very effective. Although you need a very graphically capable hardware to run it, it is a fun way to get over maths. I used processing a lot in making prototypes of projects before I would move onto Three.js, Python, html etc and processing had also a shader library so I tried making shader with processing, however compared to the well known shadertoy platform, the library was very elementary. Shadertoy was very slow to run on my gpu-less computer, but both platforms are very enjoyable.And also I have made some 3d landscape animations using a tool called Thee.js. Here is the link: https://codepen.io/esrmzokd-the-flexboxer/pen/MYaVXNW
+
+Processing is an open source generative art tool, along with p5.js. Former is written in c++ and the latter in P5.js, and I think processing lets you be more free in energy and less restrained. Generative coding or generative art is basically making art with the power of algorithmic generation , and I said before , being generative provides a good entrance point to creative endeavours and irregularity. Shader, made well known by animation engineer Inigo Quilez, is a mathematical way of making 3d animation. It uses mathematical vectors and equations to produce moving 3d image, and it is very effective. Although you need a very graphically capable hardware to run it, it is a fun way to get over maths. I used processing a lot in making prototypes of projects before I would move onto Three.js, Python, html etc and processing had also a shader library so I tried making shader with processing, however compared to the well known shadertoy platform, the library was very elementary. Shadertoy was very slow to run on my gpu-less computer, but both platforms are very enjoyable.And also I have made some 3d landscape animations using a tool called Thee.js. 
+
+Here is the link: https://codepen.io/esrmzokd-the-flexboxer/pen/MYaVXNW
 
 <img width="200" height="125" alt="image" src="https://github.com/user-attachments/assets/80938747-1c5c-4a51-8d5d-1847b6fdd59f" />
 
@@ -106,12 +128,14 @@ I acquired  datasets from Natural England Data Portal and overlayed the polygons
 
 As I have already mentioned I participated in a course run by Yorkshire Wildlife Trust for conservation professionals to teach peatland restoration techniques, and there we had off-field computer sessions where we used QGIS to design our peatland restoration management plans. It was interesting to see how GIS tools were used in real conservation and restoration practices.
 
+
 <img width="350" height="181" alt="image" src="https://github.com/user-attachments/assets/bffbb482-437f-4a32-9395-d224f4e01d27" />
 
 
 ## Kaggle_Globular_Cluster_machine_learning
 
 I am greatly interested in using algorithms and ai technology to create art, so I used machine learning models that are known to create AI generated Art such as Stable Diffusion and GAN to make images of synthesised astronomical globular clusters by feeding them thousands of real globular cluster images. Globular clusters are groups of stars in space that are clustered in a ball shape. I could not output final created image because my computer does not have GPU and you need a GPU to run machine learning models stably, but it was great to witness the possibility of AI technology in creating art. (The images below are of real globular clusters, not the one I made.) 
+
 
 <img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/505e9bb0-a99e-4292-9167-0e6e3c7d2d7c" />
 <img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/7fa44045-db1b-4942-a4c8-d2ad9434659a" />
@@ -121,6 +145,8 @@ I am greatly interested in using algorithms and ai technology to create art, so 
 
 
 ## Interdisciplinary_research
+
+
 
 As I mentioned in my cover letter, there is a gap period in my employment in 2026 uptil now, because during this time I did some researches that concerned topics such as biochemistry and physics. The motivation for this researched were greatly stemming from my personal motives and questions, and I developed an interdisciplinary mathematical models that map physical parameters to spatial/temporal coordinates and implemented continuous tims evolution using numerical ODE integration. These intensive nine months period resulted in my proficiency to use AI tools such as Claude Code to carry out python automation, mathematical modelling and data pipline construction. Below are some examples of the scripts and outputs of my research and modelling that I did during the research.
 
