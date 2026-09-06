@@ -29,7 +29,8 @@ I have included these draft-level hobby projects in this portfolio to showcase m
 2d ecosystem simulation
 
 In this project, I tried to make a self sustaining simulative agentic ecosystem where the constituting organisms interact with eachother to keep homeostasis and not die out. Obviously it was very hard to find that point of balance where each organsisms compete one another to just the right extent. I believe at this point of my scientific quest, I was not very aware of microorganisms like fungi and lichen, who are the interface moderators of exchanges of energy and material in the system, and if I have a chance to have another go, introduction of these organisms will greatly improve the longevity of the system.
-<img width="400" height="358" alt="image" src="https://github.com/user-attachments/assets/c33d55ca-25e5-4c42-9097-c3c49da129f5" />
+
+<img width="200" height="179" alt="image" src="https://github.com/user-attachments/assets/c33d55ca-25e5-4c42-9097-c3c49da129f5" />
 
 
 BOX model
@@ -38,7 +39,11 @@ I got the inspiration for this from an appendix of a biogeochemistry book I borr
 
 Puzzles and Games
 
-I am greatly interested in puzzles, 2d and 3d games and military strategy so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.
+I am greatly interested in puzzles, 2d and 3d games and military strategy so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.<img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/9b95400d-d209-4fb2-a740-06ba1ae2ae49" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/d727aa93-8e8e-4943-820e-b44a19703297" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/186ab7e5-bc41-43be-8a06-63414dc90318" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/18cc0205-f114-48e7-a80c-c6f6f71f5122" />
+
+
+
+
 
 Python_music_library_projects
 One of the reason why python is such a great and versatile language is because the libraries of different functionalities are created and made accessible by so many individual hobbiest and developers. For each field of interest there are so many well known libraries, and mingus and music.py are two of the well known music libraries in Python.I thought mingus was especially interesting because it lets you experiment with music theory and generate algorithmic music through the manipulation of those music theory. I played piano from early age and is greatly interested in different types of music, so I know the power of music theory to resonate with different people. Regardless of that, I think algorithmic generative creativity of not only music but any other discipline is limitless and more people should utilise it, because it lets us tap into creativity.
