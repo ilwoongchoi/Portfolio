@@ -131,6 +131,7 @@ I am greatly interested in astronomy and some years ago I made python codes that
 
 I am greatly interested in history and battle tactics, so I once stumbled upon an idea to start a youtube channal that analyses the geometry of battle tactics thar historical military commanders used. The battle of Cannae is a very well known battle of Antiquity that is like a textbook example of a tactical maneuver, and I wanted to make an animation of this maneuver using a QGIS function called temporal controller. At that time I was not very proficient in using different tool within QGIS, but it was good fun to try out new stuff with GIS
 
+<img width="300" height="158" alt="image" src="https://github.com/user-attachments/assets/53417daa-2f53-446d-8f24-80653f0ad819" />
 
 
 
