@@ -29,6 +29,8 @@ I have included these draft-level hobby projects in this portfolio to showcase m
 2d ecosystem simulation
 
 In this project, I tried to make a self sustaining simulative agentic ecosystem where the constituting organisms interact with eachother to keep homeostasis and not die out. Obviously it was very hard to find that point of balance where each organsisms compete one another to just the right extent. I believe at this point of my scientific quest, I was not very aware of microorganisms like fungi and lichen, who are the interface moderators of exchanges of energy and material in the system, and if I have a chance to have another go, introduction of these organisms will greatly improve the longevity of the system.
+<img width="400" height="358" alt="image" src="https://github.com/user-attachments/assets/c33d55ca-25e5-4c42-9097-c3c49da129f5" />
+
 
 BOX model
 
