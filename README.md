@@ -92,7 +92,8 @@ peatland_intricate.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/inter
 
 peatland_physics_based.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_physics_based.html
 peatland_rule_based.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_rule_based.html
-planck_morphology_plotly.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/planck_morphology_plotly.html
+planck_morphology_plotly.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/planck_morphology_plotly.html <img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/01efd180-1e32-4c59-847b-e771d846e734" />
+
 psi2_std_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/psi2_std_heatmap.html
 psi6_mean_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/psi6_mean_heatmap.html
 psi6_std_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/psi6_std_heatmap.html
