@@ -79,6 +79,9 @@ BNG Assessment mock.ppt
 
 Last year when I first came to the UK to pursue conservations career and started using GIS for spatial modelling, I was first introduced to the concept of Biodiversity Net Gain and taught myself the essence of the policy by using GIS based data analysis and a macro provided by the UK government. I chose a natural reserve site called Chilterns AONB near Oxford where I live and undertook at home mock BNG assessment of the site using already existing survey data. Because I could not field-survey the site, I had to standardise some post-dev and pre-dev condition scores to a certain value for the assessment to be possible.The assessment was very basic but it was enough to teach myself what BNG is and its meaning in British conservation and ecology industry.
 
+<img width="300" height="164" alt="image" src="https://github.com/user-attachments/assets/376c797c-5909-44fe-a351-af2916a7ff0c" />
+
+
 Chilterns Habitat Map.pptx
 
 I acquired  datasets from Natural England Data Portal and overlayed the polygons with the reserve boundaries to make a habitat map of Chilterns in Oxford.I visualised the spatial distribution of different types of habitat patches in the final result.I used GIS to visualise the spatial data and used python library matplotlib to display the result in a pie diagram.
