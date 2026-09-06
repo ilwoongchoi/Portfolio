@@ -116,7 +116,7 @@ Here is the link: https://codepen.io/esrmzokd-the-flexboxer/pen/MYaVXNW
 I am greatly interested in astronomy and some years ago I made python codes that model and predict asteroid encounters with Earth using python libraries such as poliastro and astropy. These were all during the very entrance stages of my interest in modelling and coding when I first started using AI.
 
 <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/df352464-fc2d-4ba3-93ee-1a21ef24e766" />
-<img width="200" height="123" alt="image" src="https://github.com/user-attachments/assets/4ce93031-1bc9-4831-b77c-1c2e83aed933" />
+<img width="325" height="200" alt="image" src="https://github.com/user-attachments/assets/4ce93031-1bc9-4831-b77c-1c2e83aed933" />
 
 
 
