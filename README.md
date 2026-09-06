@@ -80,7 +80,7 @@ Interdisciplinary_research
 
 As I mentioned in my cover letter, there is a gap period in my employment in 2026 uptil now, because during this time I did some researches that concerned topics such as biochemistry and physics. The motivation for this researched were greatly stemming from my personal motives and questions, and I developed an interdisciplinary mathematical models that map physical parameters to spatial/temporal coordinates and implemented continuous tims evolution using numerical ODE integration. These intensive nine months period resulted in my proficiency to use AI tools such as Claude Code to carry out python automation, mathematical modelling and data pipline construction. Below are some examples of the scripts and outputs of my research and modelling that I did during the research.
 
-k_peak_std_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/k_peak_std_heatmap.html <img width="200" height="65" alt="image" src="https://github.com/user-attachments/assets/893ac961-65df-40eb-b229-369434f0baff" />
+k_peak_std_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/k_peak_std_heatmap.html <img width="200" height="83" alt="image" src="https://github.com/user-attachments/assets/893ac961-65df-40eb-b229-369434f0baff" />
 
 k_ratio_mean_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/k_ratio_mean_heatmap.html
 mode_entropy_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/mode_entropy_heatmap.html
