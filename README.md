@@ -80,6 +80,8 @@ BNG Assessment mock.ppt
 Last year when I first came to the UK to pursue conservations career and started using GIS for spatial modelling, I was first introduced to the concept of Biodiversity Net Gain and taught myself the essence of the policy by using GIS based data analysis and a macro provided by the UK government. I chose a natural reserve site called Chilterns AONB near Oxford where I live and undertook at home mock BNG assessment of the site using already existing survey data. Because I could not field-survey the site, I had to standardise some post-dev and pre-dev condition scores to a certain value for the assessment to be possible.The assessment was very basic but it was enough to teach myself what BNG is and its meaning in British conservation and ecology industry.
 
 <img width="300" height="164" alt="image" src="https://github.com/user-attachments/assets/376c797c-5909-44fe-a351-af2916a7ff0c" />
+<img width="300" height="164" alt="image" src="https://github.com/user-attachments/assets/8cf0f9dc-448b-46e1-baea-0039343bfaf2" />
+<img width="300" height="164" alt="image" src="https://github.com/user-attachments/assets/62a76c05-1419-4741-9edd-47715e447f40" />
 
 
 Chilterns Habitat Map.pptx
@@ -92,6 +94,9 @@ I acquired  datasets from Natural England Data Portal and overlayed the polygons
 ywt_peatland_ restoration_practitioner_course.png
 
 As I have already mentioned I participated in a course run by Yorkshire Wildlife Trust for conservation professionals to teach peatland restoration techniques, and there we had off-field computer sessions where we used QGIS to design our peatland restoration management plans. It was interesting to see how GIS tools were used in real conservation and restoration practices.
+
+<img width="350" height="181" alt="image" src="https://github.com/user-attachments/assets/bffbb482-437f-4a32-9395-d224f4e01d27" />
+
 
 Kaggle_Globular_Cluster_machine_learning
 
