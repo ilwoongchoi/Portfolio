@@ -59,7 +59,7 @@ In this project, I tried to make a self sustaining simulative agentic ecosystem 
 ### BOX model
 
 
-I got the inspiration for this from an appendix of a biogeochemistry book I borrowed from the library which introduced me to BOX software, a primary modelling software for Biogeochemical modelling. There are many other types such as NPZD, PFT, ESM that are used to model biogeochemistry of ecosystem, but the BOX model was most intuitive and easy to access for a beginner. The complexity of the interaction of whole system was very hard to keep up with
+I got the inspiration for this from an appendix of a biogeochemistry book I borrowed from the library which introduced me to BOX software, a primary modelling software for biogeochemical modelling. There are many other types of biogeochemical modelling tools such as NPZD, PFT, ESM that are used to model biogeochemistry of ecosystem, but the BOX model was most intuitive and easy to access for a beginner. The complexity of the interaction of whole system was very hard to keep up with but I learnt a lot about biogeochemical modelling with this.
 
 
 
