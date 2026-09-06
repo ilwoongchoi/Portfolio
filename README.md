@@ -84,8 +84,8 @@ k_peak_std_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/inter
 
 k_ratio_mean_heatmap.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/k_ratio_mean_heatmap.html <img width="400" height="200" alt="image" src="https://github.com/user-attachments/assets/f008433b-7c55-45af-8e45-de555d99c37f" />
 
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/ocean_fluid_dynamics_interactive.html
-ocean_fluid_dynamics_standalone.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/ocean_fluid_dynamics_standalone.html
+https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/ocean_fluid_dynamics_standalone.html <img width="400" height="194" alt="image" src="https://github.com/user-attachments/assets/1e0b3081-e2f2-4690-8bae-3c078b1b219b" />
+
 peatland_3d_interactive.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_3d_interactive.html
 peatland_intricate.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_intricate.html
 peatland_physics_based.html	https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_physics_based.html
