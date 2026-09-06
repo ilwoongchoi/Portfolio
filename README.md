@@ -57,6 +57,7 @@ Ever since programming and software engineering became a skill that not only IT 
 processing_shader
 
 Processing is an open source generative art tool, along with p5.js. Former is written in c++ and the latter in P5.js, and I think processing lets you be more free in energy and less restrained. Generative coding or generative art is basically making art with the power of algorithmic generation , and I said before , being generative provides a good entrance point to creative endeavours and irregularity. Shader, made well known by animation engineer Inigo Quilez, is a mathematical way of making 3d animation. It uses mathematical vectors and equations to produce moving 3d image, and it is very effective. Although you need a very graphically capable hardware to run it, it is a fun way to get over maths. I used processing a lot in making prototypes of projects before I would move onto Three.js, Python, html etc and processing had also a shader library so I tried making shader with processing, however compared to the well known shadertoy platform, the library was very elementary. Shadertoy was very slow to run on my gpu-less computer, but both platforms are very enjoyable.And also I have made some 3d landscape animations using a tool called Thee.js. Here is the link: https://codepen.io/esrmzokd-the-flexboxer/pen/MYaVXNW
+
 <img width="200" height="125" alt="image" src="https://github.com/user-attachments/assets/80938747-1c5c-4a51-8d5d-1847b6fdd59f" />
 
 
@@ -85,7 +86,9 @@ As I have already mentioned I participated in a course run by Yorkshire Wildlife
 Kaggle_Globular_Cluster_machine_learning
 
 I am greatly interested in using algorithms and ai technology to create art, so I used machine learning models that are known to create AI generated Art such as Stable Diffusion and GAN to make images of synthesised astronomical globular clusters by feeding them thousands of real globular cluster images. Globular clusters are groups of stars in space that are clustered in a ball shape. I could not output final created image because my computer does not have GPU and you need a GPU to run machine learning models stably, but it was great to witness the possibility of AI technology in creating art. (The images below are of real globular clusters, not the one I made.) 
-<img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/ca5cacf1-c253-43f6-8f92-67a8ec28e202" /><img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/24026d7e-79dc-4f6c-bf2e-ff7012df4078" /><img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/08eb66d5-be84-4593-a98c-139858b3bcfe" />
+
+<img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/505e9bb0-a99e-4292-9167-0e6e3c7d2d7c" />
+<img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/24026d7e-79dc-4f6c-bf2e-ff7012df4078" /><img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/08eb66d5-be84-4593-a98c-139858b3bcfe" />
 
 
 
