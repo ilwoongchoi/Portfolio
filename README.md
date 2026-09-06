@@ -65,6 +65,10 @@ python_astronomy_simulations
 
 I am greatly interested in astronomy and some years ago I made python codes that model and predict asteroid encounters with Earth using python libraries such as poliastro and astropy. These were all during the very entrance stages of my interest in modelling and coding when I first started using AI.
 
+<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/df352464-fc2d-4ba3-93ee-1a21ef24e766" />
+<img width="200" height="123" alt="image" src="https://github.com/user-attachments/assets/4ce93031-1bc9-4831-b77c-1c2e83aed933" />
+
+
 GIS_works
 
 Cannae Battle visualisation
@@ -77,7 +81,10 @@ Last year when I first came to the UK to pursue conservations career and started
 
 Chilterns Habitat Map.pptx
 
-I acquired  datasets from Natural England Data Portal and overlayed the polygons with the reserve boundaries to make a habitat map of Chilterns in Oxford.I visualised the spatial distribution of different types of habitat patches in the final result.
+I acquired  datasets from Natural England Data Portal and overlayed the polygons with the reserve boundaries to make a habitat map of Chilterns in Oxford.I visualised the spatial distribution of different types of habitat patches in the final result.I used GIS to visualise the spatial data and used python library matplotlib to display the result in a pie diagram.
+
+<img width="300" height="164" alt="image" src="https://github.com/user-attachments/assets/a170ee92-2423-459d-bae7-b4d1a0f9ba97" />
+
 
 ywt_peatland_ restoration_practitioner_course.png
 
@@ -88,7 +95,8 @@ Kaggle_Globular_Cluster_machine_learning
 I am greatly interested in using algorithms and ai technology to create art, so I used machine learning models that are known to create AI generated Art such as Stable Diffusion and GAN to make images of synthesised astronomical globular clusters by feeding them thousands of real globular cluster images. Globular clusters are groups of stars in space that are clustered in a ball shape. I could not output final created image because my computer does not have GPU and you need a GPU to run machine learning models stably, but it was great to witness the possibility of AI technology in creating art. (The images below are of real globular clusters, not the one I made.) 
 
 <img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/505e9bb0-a99e-4292-9167-0e6e3c7d2d7c" />
-<img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/24026d7e-79dc-4f6c-bf2e-ff7012df4078" /><img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/08eb66d5-be84-4593-a98c-139858b3bcfe" />
+<img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/7fa44045-db1b-4942-a4c8-d2ad9434659a" />
+<img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/08eb66d5-be84-4593-a98c-139858b3bcfe" />
 
 
 
