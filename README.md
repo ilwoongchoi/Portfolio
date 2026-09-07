@@ -411,10 +411,11 @@ https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/si
 
 ## Music Composition Software
 
-During my research I made a music composition app that was supposed to help people in creating music. I included this in the portfolio to show that.along with some of my other research files, these display my ability to design and make user interfaces and dashboards . As I have already mentioned in my cv, from very young age I was very interested in web design and web development was one of the first areas of programming that I began my coding hobby with. I During my research I made a music composition app that was supposed to help people in creating music. I included this in the portfolio to show that.along with some of my other research files, these display my ability to design and make user interfaces and dashboards . As I have already mentioned in my cv, from very young age I was very keen in web design and web development was one of the first areas of programming that I began my coding hobby with. make flawless web and user interface ui, especially with the help of Ai.
+During my research I made a music composition app that was supposed to help people in creating music. I included this in the portfolio to show that along with some of my other research files, these display my ability to design and make user interfaces and dashboards. As I have already mentioned in my cv, from very young age I was very keen in web design and web development was one of the first areas of programming that I began my coding hobby with.  I can make flawless web and user interface GUI, especially with the help of AI.
 
 https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/music_composition_software/composer.html
 https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/music_composition_software/composer2.html
+
 <img width="450" height="181" alt="image" src="https://github.com/user-attachments/assets/3eaf5d6a-1317-498f-b7b6-bfbe8d43e533" />
 <img width="450" height="205" alt="image" src="https://github.com/user-attachments/assets/424fb36d-6c85-4979-b630-844ee4d59ded" />
 
