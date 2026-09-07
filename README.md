@@ -14,6 +14,9 @@ I have designed an automated, script-driven Ecological Permeability & Least-Cost
 
 The pipeline was executed across two progressive iterations to demonstrate methodological evolution and rigor: v1 (Vector-Derived Matrix Approximation), established when raster datasets were unavailable, and v2 (UKCEH LCM2023 10m Integration + Vector Barrier Overlay), constructing a publication-grade, empirical resistance surface.
 
+ result zip file -> (https://drive.google.com/file/d/1MH5sMKko_XPsoMwMZUsHxZQ6CRi38iC1/view?usp=drive_link)
+
+
 ### Technical Architecture & Methodology
 
 #### 1. Empirical Landscape Resistance Modeling (v1 vs. v2 Benchmark)
@@ -95,6 +98,7 @@ This project combines **least-cost connectivity modelling** with **multi-criteri
 
 **Scenario C produces zero viable parcels**, demonstrating that **carbon-only restoration criteria are insufficient without connectivity or proximity constraints**. This reveals a key conservation principle: landscape-scale thinking exposes synergies and trade-offs that single-objective models miss.
 
+results zip file -> (https://drive.google.com/file/d/10lp8suq0AJBqkG9Yr7yM0j9XJ-GG_sa6/view?usp=drive_link)
 ### Methodology
 
 1. **Constraint mapping:** Identify urban, water, roads, protected habitats (96.9% of landscape constrained)
