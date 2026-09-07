@@ -285,7 +285,7 @@ https://hello.processing.org/display/#@-P0rlGScFGUSRt7REkM7
 ### Python_music_library_projects
 
 
-One of the reason why python is such a great and versatile language is because the libraries of different functionalities are created and made accessible by so many individual hobbiest and developers. For each field of interest there are so many well known libraries, and mingus and music.py are two of the well known music libraries in Python.I thought mingus was especially interesting because it lets you experiment with music theory and generate algorithmic music through the manipulation of those music theory. I played piano from early age and is greatly interested in different types of music, so I know the power of music theory to resonate with different people. Regardless of that, I think algorithmic generative creativity of not only music but any other discipline is limitless and more people should utilise it, because it lets us tap into creativity.
+One of the reason why python is such a great and versatile language is because the libraries of different functionalities are created and made accessible by so many individual hobbiest and developers. Mingus and music.py are two of the well known music libraries in Python. I thought mingus was especially interesting because it lets you experiment with music theory and generate algorithmic music through the manipulation of those music theory. I think algorithmic generative creativity of not only music but any other discipline is limitless, because it lets us tap into creativity.
 
 
 
@@ -293,14 +293,14 @@ One of the reason why python is such a great and versatile language is because t
 ### job_scraping_automation
 
 
-Ever since programming and software engineering became a skill that not only IT professionals but general public could have access to, I saw many people using software to automate everyday tasks, earn money and do financial trading with automation. At first I wasn't really into these, but I began to realise the power of productivity and saving time. These automations allow you to be more efficient and spend less time doing repetitive work. So I thought why don't I also use them for scraping jobs from the internet so I get more chance of employment. I used a python library called selenium which is a well known web-scraping library. Web scraping is a term used to call automated tasks which involves the machine accessing many webpages and searching for and obtaining the information it wants.
+Ever since programming and software engineering became a skill that not only IT professionals but general public could have access to, I saw many people using software to automate everyday tasks, earn money and do financial trading with automation. At first I wasn't really into these, but I began to realise the power of productivity and saving time. These automations allow you to be more efficient and spend less time doing repetitive work. So I thought why don't I also use them for scraping jobs from the internet so I get more chance of employment. I used a python library called selenium which is a well known web-scraping library.
 
 
 
 ### processing_shader
 
 
-Processing is an open source generative art tool, along with p5.js. Former is written in c++ and the latter in P5.js, and I think processing lets you be more free in energy and less restrained. Generative coding or generative art is basically making art with the power of algorithmic generation , and I said before , being generative provides a good entrance point to creative endeavours and irregularity. Shader, made well known by animation engineer Inigo Quilez, is a mathematical way of making 3d animation. It uses mathematical vectors and equations to produce moving 3d image, and it is very effective. Although you need a very graphically capable hardware to run it, it is a fun way to get over maths. I used processing a lot in making prototypes of projects before I would move onto Three.js, Python, html etc and processing had also a shader library so I tried making shader with processing, however compared to the well known shadertoy platform, the library was very elementary. Shadertoy was very slow to run on my gpu-less computer, but both platforms are very enjoyable.And also I have made some 3d landscape animations using a tool called Thee.js. 
+Processing is an open source generative art tool, along with p5.js. I used processing a lot in making prototypes of projects before I would move onto Three.js, Python, html etc and processing had also a shader library so I tried making shader with processing. I have also made some 3d landscape animations using a tool called Three.js.
 
 Here is the link: https://codepen.io/esrmzokd-the-flexboxer/pen/MYaVXNW
 
