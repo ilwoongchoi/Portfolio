@@ -1,7 +1,7 @@
 # Portfolio
 
 
-The portfolio is divided into three thirds at large, hobby project, research project and UK National Parks habitat connectivity project. Hobby projects were all made before 2026 while research projects were done mostly from end of 2025 uptil now. And UK National Parks project was the most recent project done specifically for the purpose of portfolio. Hobby projects were done when I first began to bloom my interest in creative hobbies using IT tools, and researches were done in the synthesis phase of my interests and knowledge. Many of both my hobby projects and my research project data were lost as my laptop broke down but I could retrieve many. Many of the examples are wrong in scientific accuracy because most of these files were made at the beginning stage of my research and also because my scientific knowledge is not perfect, but these are the records of my tireless wrestling with AI and software to understand and model science and natural phenomena. Whereas, UK National Parks project showcases my ability to utilise GIS and AI tools to model spatial data and use them for BNG decision making procedures.
+The portfolio is divided into three thirds at large, hobby project, research project and GIS analysis projects.Links to all the output files can be found in this readme and other supporting files are in this github repository. If you want to see anything else please contact me and I would be more than happy to provide you with more references.
 
 
 ## Cotswolds National Landscape Connectivity Opportunity Project
