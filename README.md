@@ -390,6 +390,11 @@ https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/si
 
 https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_3d_interactive.html <img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/9e7331ca-f94d-43ef-b11c-02756f2c25af" />
 
+https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/ocean_fluid_dynamics_standalone.html
+<img width="400" height="162" alt="image" src="https://github.com/user-attachments/assets/e82ba3f7-7d4b-467f-817e-b2b5498a932d" />
+
+
+
 https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_physics_based.html
 <img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/029d4a31-b260-46d2-9549-330dd8cf2258" />
 
