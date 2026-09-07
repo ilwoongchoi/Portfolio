@@ -72,6 +72,93 @@ Topographic & Microclimatic Calibration: Incorporating high-resolution 1m/2m Env
 Species-Specific Parameterization: Tuning resistance weights for specialized target species (e.g., Hazel Dormouse Muscardinus avellanarius vs. Pine Marten Martes martes).
 Hedgerow & Linear Boundary Integration: Integrating Ordnance Survey MasterMap Water Network and woody linear features to capture micro-corridors across arable landscapes.
 
+## Cotswolds Spatial Restoration Opportunity Model
+
+**Multi-criteria suitability analysis identifying priority areas for native woodland expansion across the Cotswolds AONB (2,041 km²).**
+
+### Overview
+
+This project combines **least-cost connectivity modelling** with **multi-criteria spatial analysis** to identify and prioritise restoration opportunities. Three policy scenarios reveal how conservation objectives shape spatial priorities.
+<img width="900" height="594" alt="github_summary_graphic" src="https://github.com/user-attachments/assets/70865d30-9e31-482c-8de6-454a3485d282" />
+<img width="900" height="324" alt="scenario_weights_comparison" src="https://github.com/user-attachments/assets/960640b0-34d9-4b84-b6ce-a6b2e8e60db6" />
+
+
+### Key Results
+
+| Scenario | Focus | Parcels | Area | Mean Suitability |
+|---|---|---|---|---|
+| **A: Connectivity-First** | Bridge habitat networks | 116 | 7,259 ha | 0.054 |
+| **B: Biodiversity-First** | Expand near existing habitat | 178 | 11,398 ha | 0.064 |
+| **C: Carbon-First** | Physical suitability only | **0** | — | 0.034 |
+
+### Critical Finding
+
+**Scenario C produces zero viable parcels**, demonstrating that **carbon-only restoration criteria are insufficient without connectivity or proximity constraints**. This reveals a key conservation principle: landscape-scale thinking exposes synergies and trade-offs that single-objective models miss.
+
+### Methodology
+
+1. **Constraint mapping:** Identify urban, water, roads, protected habitats (96.9% of landscape constrained)
+2. **Environmental suitability:** Composite score from land cover, TWI, soil drainage, geomorphons, pedotopes
+3. **Connectivity integration:** Load pinch points (844) and corridors (1,308) from Cotswolds Permeability Model v2
+4. **Scenario weighting:** Apply policy-specific weights to environmental and connectivity factors
+5. **Parcel extraction:** Threshold at 0.60, minimum 2 ha, extract contiguous clusters
+6. **Connectivity assessment:** Quantify before/after improvement for top 10 parcels (mean improvement: 0.92)
+
+### Data Integration
+
+- **Land cover:** UKCEH LCM2023 (10m → 50m)
+- **Environmental:** UK-wide rasters (TWI, drainage, geomorphons, pedotopes)
+- **Habitat:** Natural England Ancient Woodland, Priority Habitat Inventory
+- **Connectivity:** Cotswolds Permeability Model v2 outputs
+- **Constraints:** OS Open Roads, urban/water from LCM
+
+### Outputs
+
+**GeoPackage:**
+- Study area boundary
+- 116 restoration parcels (Scenario A)
+- 178 restoration parcels (Scenario B)
+- Top 10 parcels with connectivity improvement scores
+
+**Rasters (50m GeoTIFF):**
+- 3 scenario suitability surfaces
+- 4 factor layers (environmental, AW proximity, corridor proximity, pinch proximity)
+- Constraint mask, scenario agreement/disagreement, pairwise differences
+
+**Tables (CSV):**
+- Model summary statistics
+- Scenario weights
+- Top 10 restoration parcels with metrics
+
+## Technical Stack
+
+- **Python:** geopandas, pandas, numpy, scipy, GDAL/rasterio
+- **GIS:** QGIS 3.x
+- **CRS:** British National Grid (EPSG:27700)
+- **Processing:** ~8 minutes (single-threaded)
+
+### Files
+
+- `README.md` — Full technical documentation
+- `PORTFOLIO_SUBMISSION.md` — Detailed portfolio package
+- `cotswolds_restoration_suitability.py` — Processing pipeline (706 lines)
+- `cotswolds_restoration_suitability.gpkg` — All vector outputs
+- `suitability_*.tif` — Scenario rasters
+- `factor_*.tif` — Component rasters
+- `*.csv` — Summary tables
+
+### Next Steps
+
+1. Field validation of top 10 parcels
+2. Cost-benefit analysis with land acquisition costs
+3. Species-specific resistance surfaces
+4. Climate projections for future suitability
+5. Phased implementation timeline
+
+---
+
+**CRS:** EPSG:27700 | **Study Area:** Cotswolds AONB | **Date:** 2026-09-07
+
 ## UK National Parks Habitats Connectivity Opportunity Project
 
 
@@ -153,6 +240,7 @@ The resulting **5-Tier Spatial Prioritisation Baseline** provides natural capita
    └── Jenks Natural Breaks 5-Tier Prioritisation Engine
    └── Batch Automated Layout Generation with OpenStreetMap (OSM) Base Layer
 
+```
 
 ## Hobby coding Projects
 
