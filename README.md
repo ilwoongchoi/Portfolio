@@ -415,7 +415,7 @@ During my research I made a music composition app that was supposed to help peop
 
 https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/music_composition_software/composer.html
 https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/music_composition_software/composer2.html
-<img width="450" height="181" alt="image" src="https://github.com/user-attachments/assets/3eaf5d6a-1317-498f-b7b6-bfbe8d43e533" 
+<img width="450" height="181" alt="image" src="https://github.com/user-attachments/assets/3eaf5d6a-1317-498f-b7b6-bfbe8d43e533" />
 <img width="450" height="205" alt="image" src="https://github.com/user-attachments/assets/424fb36d-6c85-4979-b630-844ee4d59ded" />
 
 
