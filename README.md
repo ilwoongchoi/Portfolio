@@ -140,7 +140,6 @@ This project combines **least-cost connectivity modelling** with **multi-criteri
 ### Files
 
 - `README.md` — Full technical documentation
-- `PORTFOLIO_SUBMISSION.md` — Detailed portfolio package
 - `cotswolds_restoration_suitability.py` — Processing pipeline (706 lines)
 - `cotswolds_restoration_suitability.gpkg` — All vector outputs
 - `suitability_*.tif` — Scenario rasters
