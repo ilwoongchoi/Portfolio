@@ -4,9 +4,73 @@
 The portfolio is divided into three thirds at large, hobby project, research project and UK National Parks habitat connectivity project. Hobby projects were all made before 2026 while research projects were done mostly from end of 2025 uptil now. And UK National Parks project was the most recent project done specifically for the purpose of portfolio. Hobby projects were done when I first began to bloom my interest in creative hobbies using IT tools, and researches were done in the synthesis phase of my interests and knowledge. Many of both my hobby projects and my research project data were lost as my laptop broke down but I could retrieve many. Many of the examples are wrong in scientific accuracy because most of these files were made at the beginning stage of my research and also because my scientific knowledge is not perfect, but these are the records of my tireless wrestling with AI and software to understand and model science and natural phenomena. Whereas, UK National Parks project showcases my ability to utilise GIS and AI tools to model spatial data and use them for BNG decision making procedures.
 
 
+## Cotswolds National Landscape Connectivity Opportunity Project
 
+<img width="480" height="339" alt="Cotswolds_Permeability_Connectivity_Map_A3" src="https://github.com/user-attachments/assets/b70fed6f-43bc-4d40-804d-899e8a51ec60" />
 
+### Target Scenario: Landscape Permeability & Structural-Functional Connectivity for Woodland-Associated Mammals
 
+I have designed an automated, script-driven Ecological Permeability & Least-Cost Connectivity Pipeline that advances beyond static proximity buffers, translating landscape friction and species dispersal ecology into a rigorous network graph. Anchoring statutory Ancient Woodland core patches ($\ge 5\text{ ha}$) as keystones of ecological permanence, the model quantifies how the Cotswolds' heterogeneous matrix—limestone grassland scarps, arable plateaus, dense road corridors, and urban sprawl—facilitates or impedes multi-directional wildlife movement.
+
+The pipeline was executed across two progressive iterations to demonstrate methodological evolution and rigor: v1 (Vector-Derived Matrix Approximation), established when raster datasets were unavailable, and v2 (UKCEH LCM2023 10m Integration + Vector Barrier Overlay), constructing a publication-grade, empirical resistance surface.
+
+### Technical Architecture & Methodology
+
+#### 1. Empirical Landscape Resistance Modeling (v1 vs. v2 Benchmark)
+v1 Baseline (Vector-Only Fallback):
+Generated a 25m raster surface where non-designated landscape was assigned uniform default friction ($R=10$), while designated habitats received low resistance ($R=1\text{--}5$) and OS Open Roads imposed linear friction barriers ($R=15\text{--}100$).
+Limitation: Treated arable fields, intensive pasture, urban fabric, and water identically outside statutory boundaries.
+v2 Production Surface (UKCEH LCM2023 Integration):
+Ingested the UKCEH Land Cover Map 2023 (10m classified pixels), resampled to 50m modeling resolution via mode aggregation, capturing 13 distinct ecological land cover classes.
+Parameterized ecological friction:
+Ancient Woodland ($R=1$) and Broadleaved Woodland ($R=2$) as optimal conduits
+Calcareous Grassland ($R=5$) and Priority Habitats ($R=4$) as permeable foraging matrices
+Arable Cropland ($R=10$) as high-drag terrain
+Suburban Fabric ($R=30$), Urban Centers ($R=80$), and Water/Lakes ($R=80$) as severe dispersal barriers
+Overlaid vector-level OS Open Roads with tiered barrier costs: Motorways ($R=100$), A-Roads ($R=60$), B-Roads ($R=30$), and Minor Roads ($R=15$).
+Ecological Insight: The v2 empirical surface unmasked structural fragmentation, increasing isolated core patches from 38 to 41 and revealing 844 critical bottleneck candidates (vs. 700 in v1).
+
+#### 2. Graph-Theoretical Least-Cost Corridors (Dijkstra Shortest Path)
+Converted the 2,766,000-cell resistance grid into an undirected 4-neighbour weighted sparse adjacency graph (scipy.sparse.csr_matrix).
+Computed all-to-all least-cost distance surfaces from 400 Ancient Woodland core centroids ($\ge 5\text{ ha}$, total 8,068 ha) using memory-optimized, single-source Dijkstra passes.
+Filtered candidate functional linkages via biological thresholding: maximum Euclidean dispersal range $\le 3,000\text{ m}$ and maximum accumulated resistance cost $< 5,000$ cost-units, yielding 1,308 functional ecological corridors.
+
+#### 3. Network Topology & Keystone Node Centrality (NetworkX)
+Modeled the landscape as a complex topological graph ($G=(V, E)$, with $|V|=400$, $|E|=1,308$, 82 connected components).
+Computed nodal centrality metrics to rank spatial criticality:
+Betweenness Centrality: Identified strategic ecological "stepping stones" funneled by regional movement (Core #223 identified as primary keystone hub).
+Degree Centrality & Closeness: Measured local cluster redundancy versus dispersal periphery.
+Iterative Node-Removal Sensitivity Analysis: Quantified catastrophic fragmentation impact on the largest connected component if specific woodland patches are degraded or lost.
+
+#### 4. Bottleneck & Strategic Restoration Opportunity Identification
+Formulated an empirical Resistance Ratio Metric ($\text{Cost Distance} / \text{Euclidean Distance}$).
+Corridors exhibiting a ratio $> 2.0$ were flagged as high-friction pinch points where animals are forced to take circuitous paths around infrastructure barriers.
+Ranked 844 Restoration Candidate Sites via an Ecological ROI Priority Score: $$\text{Priority} = \left(\frac{\text{Cost Distance}}{\text{Euclidean Distance}}\right) \times \left(\frac{1}{\text{Euclidean Distance}}\right)$$ Directly highlighting target locations where hedgerow planting, woodland creation, or wildlife underpasses yield maximum regional connectivity gain per pound invested.
+Cartographic & Deliverable Outputs
+All components were structured into an automated, headless QGIS Python deployment pipeline:
+
+#### A3 Landscape Cartographic Suite (300 DPI PNG & Vector PDF):
+High-fidelity cartography featuring an offline OpenStreetMap (OSM) Zoom 11 Basemap dynamically downloaded, reprojected, and georeferenced to British National Grid (EPSG:27700).
+Multi-tiered styling: 7-stop perceptual resistance gradient, graduated corridor friction lines, haloed centrality hubs, and high-visibility diamond pinch points.
+Comprehensive sidebar dashboard card summarizing study area metrics, scale bar, custom minimalist compass, and full attribution.
+QGIS Master Project (.qgz):
+Fully styled, production-ready workspace pre-configured with local GeoTIFFs and GeoPackage layers.
+Structured Spatial Repository (.gpkg & CSVs):
+Clean, standardized OGR layers: 01_study_area, 10_core_patches, 14_connectivity_network, 15_centrality, and 17_restoration_opportunities.
+Comprehensive audit trails including pairwise cost tables and node removal impact logs.
+
+### Key Features
+Statutory Ancient Woodland Core Anchoring: Prioritizes irreplaceable, ancient semi-natural habitats ($\ge 5\text{ ha}$) as permanent network nodes.
+Empirical Multi-Class Resistance Surface: Integrates UKCEH LCM2023 satellite-derived land cover with road network barrier hierarchies.
+Algorithmic Shortest Path Routing: Sparse Dijkstra implementation on a 2.76M-cell grid graph avoiding arbitrary straight-line assumptions.
+Graph-Theoretic Centrality & Resilience Modeling: Quantifies patch vulnerability and keystone connectors via NetworkX.
+Actionable BNG & Nature Recovery Spatial Targeting: Pinpoints 844 quantified restoration interventions based on ecological drag ratios.
+Fully Automated End-to-End Pipeline: CLI Python orchestration spanning data extraction, graph computation, spatial indexing, cartographic layout generation, and multi-format export.
+
+### Further Considerations
+Topographic & Microclimatic Calibration: Incorporating high-resolution 1m/2m Environment Agency LiDAR DTM to evaluate slope impedance on steep Cotswolds escarpments.
+Species-Specific Parameterization: Tuning resistance weights for specialized target species (e.g., Hazel Dormouse Muscardinus avellanarius vs. Pine Marten Martes martes).
+Hedgerow & Linear Boundary Integration: Integrating Ordnance Survey MasterMap Water Network and woody linear features to capture micro-corridors across arable landscapes.
 
 ## UK National Parks Habitats Connectivity Opportunity Project
 
@@ -42,7 +106,52 @@ Further Considerations: The current model was rapidly built based on national-le
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/eb201587-1feb-4538-87ee-8a4a8ce7fe06" />
 
 
+# UK National Parks Habitat Connectivity & Restoration Opportunity Model
 
+**A Scalable Multi-Criteria Spatial Decision Framework for Natural Capital Allocation & BNG Site Prioritisation**
+
+
+## Executive Summary
+This project presents an automated, reproducible spatial prioritisation pipeline designed to identify and rank habitat restoration opportunities across all 10 National Parks in England. Moving beyond manual desktop GIS analysis, the framework operationalises the core principles of the Lawton Report (*Making Space for Nature: "More, Bigger, Better and Joined"*) by establishing functional 250 m ecological connectivity buffers around statutory **Ancient Woodland** cores while integrating region-specific biogeographical targets.
+
+The resulting **5-Tier Spatial Prioritisation Baseline** provides natural capital investors, conservation charities, and organisations like Oxygen Conservation with an evidence-based decision-support tool to strategically direct capital allocation, land acquisition, and Biodiversity Net Gain (BNG) credit generation toward sites with the highest ecological return on investment (ROI).
+
+---
+
+## Key Capabilities & Strategic Highlights
+
+- **Statutory Ecological Anchoring**: Ancient Woodland patches are designated as permanent ecological anchors to ensure long-term ecosystem resilience and temporal continuity.
+- **Biogeographically Tailored Target Habitats**: Rather than applying a generic template, each National Park is matched to its defining ecological asset (e.g., *Blanket Bog* in the Peak District, *Wood-Pasture & Parkland* in the New Forest, *Limestone Pavement* in the Yorkshire Dales, and *Reedbeds/Fens* in The Broads).
+- **Physical Barrier & Fragmentation Filtering**: Integrated Ordnance Survey (OS) Open Roads network geometry to systematically excise highway corridors (10 m buffer), mitigating road mortality and functional landscape severance.
+- **Multi-Criteria Decision Analysis (MCDA)**: Applied a Weighted Linear Combination (WLC) model balancing:
+  $$\text{Score} = w_1 \cdot (1 - d_{\text{norm}}) + w_2 \cdot (a_{\text{norm}}) + w_3 \cdot (\text{Environmental Suitability})$$
+  - **Ecological Efficacy ($50\%$)**: Distance minimisation to core ancient woodland networks.
+  - **Restoration Scale ($50\%$)**: Contiguous habitat patch area maximisation.
+- **5-Tier Jenks Natural Breaks Grading**: Output classified into Tier 1 (Highest Acquisition Priority / Core Link) through Tier 5 (Low Strategic Contribution) for intuitive spatial interpretation.
+- **End-to-End Automation via Python & PyQGIS**: Automated data ingestion, geometric difference/intersection operations, spatial indexing (`cKDTree`), scoring, and 300 DPI high-resolution cartographic layout rendering across all 10 National Parks.
+
+---
+
+## Spatial Methodology & Pipeline Architecture
+
+```text
+[1. Baseline Core Identification]
+   └── Natural England Ancient Woodland Inventory (Anchor Polygons)
+   └── Generate 250 m Euclidean Connectivity Buffers
+            │
+[2. Spatial Gap & Target Extraction]
+   └── Erase existing Habitat Network Core Polygons (Extract Restoration Gaps)
+   └── Spatial Overlay with Priority Habitat Inventory (PHI England)
+   └── Geometric difference with OS Open Roads (10 m Barrier Buffer)
+            │
+[3. Multi-Criteria Attribute Scoring (MCDA)]
+   └── Distance to Nearest Core Anchor (Centroid-to-Centroid Nearest-Neighbour Search)
+   └── Contiguous Restorable Patch Area Calculation (ha)
+   └── Min-Max Feature Normalisation & Multi-Criteria Weighting
+            │
+[4. Decision-Support Classification]
+   └── Jenks Natural Breaks 5-Tier Prioritisation Engine
+   └── Batch Automated Layout Generation with OpenStreetMap (OSM) Base Layer
 
 ## Hobby coding Projects
 
@@ -74,7 +183,7 @@ I got the inspiration for this from an appendix of a biogeochemistry book I borr
 
 
 
-I am greatly interested in puzzles, 2d and 3d games and military strategy so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.
+I am greatly interested in puzzles, 2d and 3d games so I included these to show what I can integrate with ecology and spatial planning. In my free time in the past I have enjoyed many logic and mobile puzzles such as sudoku, slitherink, sumgrid, block puzzle, slide puzzle, nonogram and so on, so I thought it would be fun to make them for mobile using many different language frameworks and platform.  The essence is that, refreshing or creation of  new game or a puzzle board is done by random selection of the numerals or positional value on the board by the machine, and this creates infinite number of new board that people can enjoy in their free time.
 
 <img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/9b95400d-d209-4fb2-a740-06ba1ae2ae49" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/d727aa93-8e8e-4943-820e-b44a19703297" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/186ab7e5-bc41-43be-8a06-63414dc90318" /><img width="200" height="188" alt="image" src="https://github.com/user-attachments/assets/18cc0205-f114-48e7-a80c-c6f6f71f5122" />
 
