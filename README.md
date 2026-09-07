@@ -409,7 +409,11 @@ https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/si
 <img width="400" height="357" alt="image" src="https://github.com/user-attachments/assets/503ab7d5-9753-4c33-b33e-2dc78d75d15d" /> <img width="400" height="385" alt="image" src="https://github.com/user-attachments/assets/f0b0f14a-7ea6-4267-803c-f4066c791ca4" /> <img width="400" height="264" alt="image" src="https://github.com/user-attachments/assets/a9879791-df51-4552-a242-89f3c39912c6" /><img width="400" height="208" alt="image" src="https://github.com/user-attachments/assets/692f7bd9-41a7-4e7d-b731-43ec94c15326" /><img width="400" height="293" alt="image" src="https://github.com/user-attachments/assets/7fdfd8c1-b8cb-47b1-9894-027d2a805579" /><img width="400" height="237" alt="image" src="https://github.com/user-attachments/assets/87284b71-f735-49d3-a684-a3c35d625291" /> <img width="400" height="108" alt="image" src="https://github.com/user-attachments/assets/c02b596a-d222-4e28-804f-f7fce2a99a6a" />
 
 
+## Music Composition Software
 
+During my research I made a music composition app that was supposed to help people in creating music. I included this in the portfolio to show that.along with some of my other research files, these display my ability to design and make user interfaces and dashboards . As I have already mentioned in my cv, from very young age I was very interested in web design and web development was one of the first areas of programming that I began my coding hobby with. I During my research I made a music composition app that was supposed to help people in creating music. I included this in the portfolio to show that.along with some of my other research files, these display my ability to design and make user interfaces and dashboards . As I have already mentioned in my cv, from very young age I was very keen in web design and web development was one of the first areas of programming that I began my coding hobby with. make flawless web and user interface ui, especially with the help of Ai.
+
+https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/music_composition_software/composer.html
 
 
 
