@@ -1,0 +1,75 @@
+=================================================================
+  REBUILDING FROM SCRATCH: TRUE GEOMETRY EXTRACTION PIPELINE
+=================================================================
+
+--- Running Project 1: Environmental Filtering Pipeline ---
+
+[Project 1] SKIP NEW FOREST (already saved)
+
+[Project 1] SKIP EXMOOR (already saved)
+
+[Project 1] SKIP DARTMOOR (already saved)
+
+[Project 1] SKIP PEAK DISTRICT (already saved)
+
+[Project 1] SKIP NORTH YORK MOORS (already saved)
+
+[Project 1] SKIP LAKE DISTRICT (already saved)
+
+[Project 1] SKIP THE BROADS (already saved)
+
+[Project 1] SKIP SOUTH DOWNS (already saved)
+
+[Project 1] Generating Raw Geometries for: NORTHUMBERLAND
+  -> PHI loaded: 19514 patches in 113.6s
+  -> After road excision: 19391 patches in 9.7s
+  -> After explode+area filter: 16864 patches
+  -> WARNING: No patches after TWI filter, using all
+  -> Saved 16864 patches (Layer: opp_northumberland) in 132.1s total
+
+[Project 1] Generating Raw Geometries for: YORKSHIRE DALES
+  -> PHI loaded: 14024 patches in 121.9s
+  -> After road excision: 13999 patches in 12.3s
+  -> After explode+area filter: 12177 patches
+  -> Saved 12177 patches (Layer: opp_yorkshire_dales) in 140.5s total
+
+--- Running Project 2: Pure Peatland & Wetland Hydrological Geometry Extraction ---
+
+[Project 2] Generating Pure Peatland Geometries for: PEAK DISTRICT
+  -> PHI loaded: 16059 patches in 17.5s
+  -> After peat keyword filter: 8642 patches
+  -> After road excision: 8617 patches in 30.2s
+  -> After explode+area filter: 6251 patches
+  -> Saved 6251 patches (Layer: peat_opp_peak_district) in 121.0s total
+
+[Project 2] Generating Pure Peatland Geometries for: DARTMOOR
+  -> PHI loaded: 7031 patches in 4.3s
+  -> After peat keyword filter: 3562 patches
+  -> After road excision: 3547 patches in 20.6s
+  -> After explode+area filter: 2982 patches
+  -> Saved 2982 patches (Layer: peat_opp_dartmoor) in 37.7s total
+
+[Project 2] Generating Pure Peatland Geometries for: THE BROADS
+  -> PHI loaded: 6236 patches in 11.9s
+  -> After peat keyword filter: 3222 patches
+  -> After road excision: 3218 patches in 16.2s
+  -> After explode+area filter: 1981 patches
+  -> Saved 1981 patches (Layer: peat_opp_the_broads) in 76.5s total
+
+[Project 2] Generating Pure Peatland Geometries for: NORTHUMBERLAND
+  -> PHI loaded: 19514 patches in 17.3s
+  -> After peat keyword filter: 15059 patches
+  -> After road excision: 14995 patches in 6.3s
+  -> After explode+area filter: 11153 patches
+  -> Saved 11153 patches (Layer: peat_opp_northumberland) in 106.8s total
+
+[Project 2] Generating Pure Peatland Geometries for: NORTH YORK MOORS
+  -> PHI loaded: 8799 patches in 13.2s
+  -> After peat keyword filter: 4186 patches
+  -> After road excision: 4180 patches in 7.7s
+  -> After explode+area filter: 3312 patches
+  -> Saved 3312 patches (Layer: peat_opp_north_york_moors) in 101.3s total
+
+=================================================================
+  TRUE DISTINCT GEOMETRIES CREATED ACROSS BOTH PROJECTS!
+=================================================================
