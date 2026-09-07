@@ -130,7 +130,7 @@ The resulting **5-Tier Spatial Prioritisation Baseline** provides natural capita
 - **5-Tier Jenks Natural Breaks Grading**: Output classified into Tier 1 (Highest Acquisition Priority / Core Link) through Tier 5 (Low Strategic Contribution) for intuitive spatial interpretation.
 - **End-to-End Automation via Python & PyQGIS**: Automated data ingestion, geometric difference/intersection operations, spatial indexing (`cKDTree`), scoring, and 300 DPI high-resolution cartographic layout rendering across all 10 National Parks.
 
----
+
 
 ## Spatial Methodology & Pipeline Architecture
 
@@ -152,6 +152,7 @@ The resulting **5-Tier Spatial Prioritisation Baseline** provides natural capita
 [4. Decision-Support Classification]
    └── Jenks Natural Breaks 5-Tier Prioritisation Engine
    └── Batch Automated Layout Generation with OpenStreetMap (OSM) Base Layer
+
 
 ## Hobby coding Projects
 
