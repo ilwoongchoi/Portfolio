@@ -160,7 +160,7 @@ results zip file -> (https://drive.google.com/file/d/10lp8suq0AJBqkG9Yr7yM0j9XJ-
 
 ---
 
-**CRS:** EPSG:27700 | **Study Area:** Cotswolds AONB | **Date:** 2026-09-07
+**CRS:** EPSG:27700 | **Study Area:** Cotswolds AONB | 
 
 ## UK National Parks Habitats Connectivity Opportunity Project
 
@@ -195,55 +195,6 @@ Further Considerations: The current model was rapidly built based on national-le
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/19ee5b97-cb3a-4dde-8c3b-817f61fdd576" />
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/eb201587-1feb-4538-87ee-8a4a8ce7fe06" />
 
-
-# UK National Parks Habitat Connectivity & Restoration Opportunity Model
-
-**A Scalable Multi-Criteria Spatial Decision Framework for Natural Capital Allocation & BNG Site Prioritisation**
-
-
-## Executive Summary
-This project presents an automated, reproducible spatial prioritisation pipeline designed to identify and rank habitat restoration opportunities across all 10 National Parks in England. Moving beyond manual desktop GIS analysis, the framework operationalises the core principles of the Lawton Report (*Making Space for Nature: "More, Bigger, Better and Joined"*) by establishing functional 250 m ecological connectivity buffers around statutory **Ancient Woodland** cores while integrating region-specific biogeographical targets.
-
-The resulting **5-Tier Spatial Prioritisation Baseline** provides natural capital investors, conservation charities, and organisations like Oxygen Conservation with an evidence-based decision-support tool to strategically direct capital allocation, land acquisition, and Biodiversity Net Gain (BNG) credit generation toward sites with the highest ecological return on investment (ROI).
-
----
-
-## Key Capabilities & Strategic Highlights
-
-- **Statutory Ecological Anchoring**: Ancient Woodland patches are designated as permanent ecological anchors to ensure long-term ecosystem resilience and temporal continuity.
-- **Biogeographically Tailored Target Habitats**: Rather than applying a generic template, each National Park is matched to its defining ecological asset (e.g., *Blanket Bog* in the Peak District, *Wood-Pasture & Parkland* in the New Forest, *Limestone Pavement* in the Yorkshire Dales, and *Reedbeds/Fens* in The Broads).
-- **Physical Barrier & Fragmentation Filtering**: Integrated Ordnance Survey (OS) Open Roads network geometry to systematically excise highway corridors (10 m buffer), mitigating road mortality and functional landscape severance.
-- **Multi-Criteria Decision Analysis (MCDA)**: Applied a Weighted Linear Combination (WLC) model balancing:
-  $$\text{Score} = w_1 \cdot (1 - d_{\text{norm}}) + w_2 \cdot (a_{\text{norm}}) + w_3 \cdot (\text{Environmental Suitability})$$
-  - **Ecological Efficacy ($50\%$)**: Distance minimisation to core ancient woodland networks.
-  - **Restoration Scale ($50\%$)**: Contiguous habitat patch area maximisation.
-- **5-Tier Jenks Natural Breaks Grading**: Output classified into Tier 1 (Highest Acquisition Priority / Core Link) through Tier 5 (Low Strategic Contribution) for intuitive spatial interpretation.
-- **End-to-End Automation via Python & PyQGIS**: Automated data ingestion, geometric difference/intersection operations, spatial indexing (`cKDTree`), scoring, and 300 DPI high-resolution cartographic layout rendering across all 10 National Parks.
-
-
-
-## Spatial Methodology & Pipeline Architecture
-
-```text
-[1. Baseline Core Identification]
-   └── Natural England Ancient Woodland Inventory (Anchor Polygons)
-   └── Generate 250 m Euclidean Connectivity Buffers
-            │
-[2. Spatial Gap & Target Extraction]
-   └── Erase existing Habitat Network Core Polygons (Extract Restoration Gaps)
-   └── Spatial Overlay with Priority Habitat Inventory (PHI England)
-   └── Geometric difference with OS Open Roads (10 m Barrier Buffer)
-            │
-[3. Multi-Criteria Attribute Scoring (MCDA)]
-   └── Distance to Nearest Core Anchor (Centroid-to-Centroid Nearest-Neighbour Search)
-   └── Contiguous Restorable Patch Area Calculation (ha)
-   └── Min-Max Feature Normalisation & Multi-Criteria Weighting
-            │
-[4. Decision-Support Classification]
-   └── Jenks Natural Breaks 5-Tier Prioritisation Engine
-   └── Batch Automated Layout Generation with OpenStreetMap (OSM) Base Layer
-
-```
 
 ## Hobby coding Projects
 
