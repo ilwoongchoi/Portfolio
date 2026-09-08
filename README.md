@@ -226,7 +226,11 @@ Question: Where is peatland rewetting hydrologically feasible across 5 National 
 | The Broads | 3,000 | 2,955 | 98.5% |
 | Northumberland | 7,017 | 3,942 | 56.2% |
 | North York Moors | 1,169 | 671 | 57.4% |
- 
+
+ <img width="400" height="282" alt="DARTMOOR_Peatland_Rewetting_Model" src="https://github.com/user-attachments/assets/2a5d0d8b-cff2-4773-a004-b84f841e369a" /> 
+ <img width="400" height="282" alt="NORTH YORK MOORS_Peatland_Rewetting_Model" src="https://github.com/user-attachments/assets/326a4809-e993-4e42-8a45-24c5d4edfa75" />
+
+
 Key finding: TWI filtering removes 44–56% of peat candidates in upland parks. The Broads retains 98.5% — expected for a lowland wetland landscape. Peak District retains only 43.9% — many peat patches sit on slopes too dry for effective rewetting.
  
 Tech: Python, GeoPandas, GDAL raster sampling, SciPy, QGIS Print Layout
