@@ -53,9 +53,9 @@ I formulated a Resistance Ratio Metric ($\text{Cost Distance} / \text{Euclidean 
 - Actionable BNG Targeting: Pinpoints 844 specific restoration sites based on quantified ecological drag.
 
 ### Further Considerations
-Topographic & Microclimatic Calibration: Incorporating high-resolution 1m/2m Environment Agency LiDAR DTM to evaluate slope impedance on steep Cotswolds escarpments.
-Species-Specific Parameterization: Tuning resistance weights for specialized target species (e.g., Hazel Dormouse Muscardinus avellanarius vs. Pine Marten Martes martes).
-Hedgerow & Linear Boundary Integration: Integrating Ordnance Survey MasterMap Water Network and woody linear features to capture micro-corridors across arable landscapes.
+- Topographic Calibration: Integrating 1m/2m LiDAR DTM to account for slope impedance on the Cotswolds escarpments.
+- Species-Specific Models: Tuning resistance weights for specialized species like the Hazel Dormouse or Pine Marten.
+- Linear Feature Integration: Adding OS MasterMap Water Networks and hedgerows to capture micro-corridors in arable areas.
 
 ## Cotswolds Spatial Restoration Opportunity Model
 
