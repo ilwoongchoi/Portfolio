@@ -10,9 +10,9 @@ The portfolio is divided into three thirds at large, hobby project, research pro
 
 ### Target Scenario: Landscape Permeability & Structural-Functional Connectivity for Woodland-Associated Mammals
 
-I have designed an automated, script-driven Ecological Permeability & Least-Cost Connectivity Pipeline that advances beyond static proximity buffers, translating landscape friction and species dispersal ecology into a rigorous network graph. Anchoring statutory Ancient Woodland core patches ($\ge 5\text{ ha}$) as keystones of ecological permanence, the model quantifies how the Cotswolds' heterogeneous matrix—limestone grassland scarps, arable plateaus, dense road corridors, and urban sprawl—facilitates or impedes multi-directional wildlife movement.
+I developed an automated, script-based pipeline to model ecological permeability and least-cost connectivity. Moving beyond simple proximity buffers, this project translates landscape friction and dispersal ecology into a rigorous network graph. By using statutory Ancient Woodland core patches ($\ge 5\text{ ha}$) as keystones, the model quantifies how the Cotswolds' diverse matrix—from limestone grasslands to dense road corridors—facilitates or obstructs wildlife movement.
 
-The pipeline was executed across two progressive iterations to demonstrate methodological evolution and rigor: v1 (Vector-Derived Matrix Approximation), established when raster datasets were unavailable, and v2 (UKCEH LCM2023 10m Integration + Vector Barrier Overlay), constructing a publication-grade, empirical resistance surface.
+The methodology evolved through two distinct phases: v1 (Vector-Derived Matrix Approximation) served as a proof-of-concept when raster data was limited, and v2 (UKCEH LCM2023 10m Integration + Vector Barriers) delivered a production-grade, empirical resistance surface for high-fidelity modeling.
 
  result zip file -> (https://drive.google.com/file/d/1MH5sMKko_XPsoMwMZUsHxZQ6CRi38iC1/view?usp=drive_link)
 
@@ -34,9 +34,7 @@ Overlaid vector-level OS Open Roads with tiered barrier costs: Motorways ($R=100
 Ecological Insight: The v2 empirical surface unmasked structural fragmentation, increasing isolated core patches from 38 to 41 and revealing 844 critical bottleneck candidates (vs. 700 in v1).
 
 #### 2. Graph-Theoretical Least-Cost Corridors (Dijkstra Shortest Path)
-Converted the 2,766,000-cell resistance grid into an undirected 4-neighbour weighted sparse adjacency graph (scipy.sparse.csr_matrix).
-Computed all-to-all least-cost distance surfaces from 400 Ancient Woodland core centroids ($\ge 5\text{ ha}$, total 8,068 ha) using memory-optimized, single-source Dijkstra passes.
-Filtered candidate functional linkages via biological thresholding: maximum Euclidean dispersal range $\le 3,000\text{ m}$ and maximum accumulated resistance cost $< 5,000$ cost-units, yielding 1,308 functional ecological corridors.
+The 2.76-million-cell resistance grid was converted into an undirected 4-neighbour weighted adjacency graph using scipy.sparse.csr_matrix. I computed distance surfaces for 400 Ancient Woodland centroids ($\ge 5\text{ ha}$) using memory-optimized Dijkstra passes. Linkages were filtered by biological thresholds: a maximum Euclidean range of $\le 3,000\text{ m}$ and an accumulated resistance cost of $< 5,000$, resulting in ,1308 functional corridors.
 
 #### 3. Network Topology & Keystone Node Centrality (NetworkX)
 Modeled the landscape as a complex topological graph ($G=(V, E)$, with $|V|=400$, $|E|=1,308$, 82 connected components).
@@ -46,21 +44,7 @@ Degree Centrality & Closeness: Measured local cluster redundancy versus dispersa
 Iterative Node-Removal Sensitivity Analysis: Quantified catastrophic fragmentation impact on the largest connected component if specific woodland patches are degraded or lost.
 
 #### 4. Bottleneck & Strategic Restoration Opportunity Identification
-Formulated an empirical Resistance Ratio Metric ($\text{Cost Distance} / \text{Euclidean Distance}$).
-Corridors exhibiting a ratio $> 2.0$ were flagged as high-friction pinch points where animals are forced to take circuitous paths around infrastructure barriers.
-Ranked 844 Restoration Candidate Sites via an Ecological ROI Priority Score: $$\text{Priority} = \left(\frac{\text{Cost Distance}}{\text{Euclidean Distance}}\right) \times \left(\frac{1}{\text{Euclidean Distance}}\right)$$ Directly highlighting target locations where hedgerow planting, woodland creation, or wildlife underpasses yield maximum regional connectivity gain per pound invested.
-Cartographic & Deliverable Outputs
-All components were structured into an automated, headless QGIS Python deployment pipeline:
-
-#### A3 Landscape Cartographic Suite (300 DPI PNG & Vector PDF):
-High-fidelity cartography featuring an offline OpenStreetMap (OSM) Zoom 11 Basemap dynamically downloaded, reprojected, and georeferenced to British National Grid (EPSG:27700).
-Multi-tiered styling: 7-stop perceptual resistance gradient, graduated corridor friction lines, haloed centrality hubs, and high-visibility diamond pinch points.
-Comprehensive sidebar dashboard card summarizing study area metrics, scale bar, custom minimalist compass, and full attribution.
-QGIS Master Project (.qgz):
-Fully styled, production-ready workspace pre-configured with local GeoTIFFs and GeoPackage layers.
-Structured Spatial Repository (.gpkg & CSVs):
-Clean, standardized OGR layers: 01_study_area, 10_core_patches, 14_connectivity_network, 15_centrality, and 17_restoration_opportunities.
-Comprehensive audit trails including pairwise cost tables and node removal impact logs.
+I formulated a Resistance Ratio Metric ($\text{Cost Distance} / \text{Euclidean Distance}$) to identify inefficiency. Corridors with a ratio $> 2.0$ were flagged as high-friction pinch points where infrastructure forces circuitous movement. Restoration sites were ranked using an Ecological ROI Priority Score: $$\text{Priority} = \left(\frac{\text{Cost Distance}}{\text{Euclidean Distance}}\right) \times \left(\frac{1}{\text{Euclidean Distance}}\right)$$ This targets locations where interventions like hedgerow planting or woodland creation provide the maximum connectivity gain per pound spent.
 
 ### Key Features
 Statutory Ancient Woodland Core Anchoring: Prioritizes irreplaceable, ancient semi-natural habitats ($\ge 5\text{ ha}$) as permanent network nodes.
