@@ -177,17 +177,22 @@ Further Considerations: The current model was rapidly built based on national-le
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/19ee5b97-cb3a-4dde-8c3b-817f61fdd576" />
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/eb201587-1feb-4538-87ee-8a4a8ce7fe06" />
 
-## UK National Parks Restoration Suitability Model
+
 
 
 
 ## UK National Parks Restoration Suitability Model & Peatland Hydrological Rewetting Model
- 
+
+### Project 4: UK National Parks Restoration Suitability Model
 Question: Which areas across 10 National Parks offer the highest restoration suitability?
  
 - Pipeline: PHI geometry extraction → road excision (OS Open Roads) → explode + area filter → cKDTree proximity → composite scoring
 -*Scoring: Distance to existing habitat (35%) + Parcel area (35%) + TWI hydrology (30%)
 - Output: 82,340 parcels across 10 parks, 5-tier blue gradient (#EFF3FF → #08519C)
+
+<img width="400" height="282" alt="NORTHUMBERLAND_Restoration_Suitability" src="https://github.com/user-attachments/assets/44dca3a5-cfd2-4c8e-9338-4d0f84908ffa" />
+<img width="400" height="282" alt="THE BROADS_Restoration_Suitability" src="https://github.com/user-attachments/assets/99a62df1-3a4b-4356-9bae-2be2f95fb53b" />
+
  
 | National Park | Parcels | Proximity Mean | Processing Time |
 |---|---|---|---|
@@ -206,7 +211,7 @@ Tech: Python, GeoPandas, SciPy cKDTree, pyogrio, QGIS Processing
  
 ---
  
-## Project 5: Peatland Hydrological Rewetting Model
+### Project 5: Peatland Hydrological Rewetting Model
  
 Question: Where is peatland rewetting hydrologically feasible across 5 National Parks?
  
