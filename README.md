@@ -1,7 +1,7 @@
 # Portfolio
 
 
-The portfolio is divided into three thirds at large, hobby project, research projects and GIS analysis projects.Links to all the output files can be found in this readme and other supporting files are in this github repository. If you want to see anything else please contact me and I would be more than happy to provide you with more references.
+The portfolio is divided into three thirds at large, hobby project, research projects and GIS analysis projects. Links to all the output files can be found in this readme and other supporting files are in this github repository. If you want to see anything else please contact me and I would be more than happy to provide you with more references.
 
 
 ## Cotswolds National Landscape Connectivity Opportunity Project
