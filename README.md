@@ -177,6 +177,138 @@ Further Considerations: The current model was rapidly built based on national-le
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/19ee5b97-cb3a-4dde-8c3b-817f61fdd576" />
 <img width="300" height="162" alt="image" src="https://github.com/user-attachments/assets/eb201587-1feb-4538-87ee-8a4a8ce7fe06" />
 
+## UK National Parks Restoration Suitability Model
+
+
+
+## UK National Parks Restoration Suitability Model & Peatland Hydrological Rewetting Model
+ 
+Question: Which areas across 10 National Parks offer the highest restoration suitability?
+ 
+- Pipeline: PHI geometry extraction → road excision (OS Open Roads) → explode + area filter → cKDTree proximity → composite scoring
+-*Scoring: Distance to existing habitat (35%) + Parcel area (35%) + TWI hydrology (30%)
+- Output: 82,340 parcels across 10 parks, 5-tier blue gradient (#EFF3FF → #08519C)
+ 
+| National Park | Parcels | Proximity Mean | Processing Time |
+|---|---|---|---|
+| New Forest | 12,058 | 0.866 | 363s |
+| Peak District | 5,931 | 0.894 | 349s |
+| North York Moors | 6,948 | 0.908 | 220s |
+| Lake District | 15,084 | 0.672 | 293s |
+| The Broads | 5,004 | 0.949 | 121s |
+| South Downs | 12,340 | 0.791 | 951s |
+| Northumberland | 9,688 | 0.830 | 172s |
+| Yorkshire Dales | 11,229 | 0.823 | 181s |
+ 
+Key pattern: Lake District has lowest proximity (0.672) — mountainous terrain fragments habitat networks. The Broads has highest (0.949) — dense wetland matrix.
+ 
+Tech: Python, GeoPandas, SciPy cKDTree, pyogrio, QGIS Processing
+ 
+---
+ 
+## Project 5: Peatland Hydrological Rewetting Model
+ 
+Question: Where is peatland rewetting hydrologically feasible across 5 National Parks?
+ 
+- Pipeline: PHI keyword filter (peat/bog/mire/fen/wetland) → road excision → area filter → **TWI hard filter** → MRVBF valley scoring → composite scoring
+- Scoring: TWI hydrological wetness (40%) + MRVBF valley index (30%) + Sequestration scale (30%)
+- Output: 10,672 parcels, 5-tier purple gradient (#F2F0F7 → #54278F)
+ 
+| National Park | Pre-TWI Parcels | Post-TWI Parcels | Retention Rate |
+|---|---|---|---|
+| Peak District | 4,945 | 2,169 | 43.9% |
+| Dartmoor | 1,389 | 935 | 67.3% |
+| The Broads | 3,000 | 2,955 | 98.5% |
+| Northumberland | 7,017 | 3,942 | 56.2% |
+| North York Moors | 1,169 | 671 | 57.4% |
+ 
+Key finding: TWI filtering removes 44–56% of peat candidates in upland parks. The Broads retains 98.5% — expected for a lowland wetland landscape. Peak District retains only 43.9% — many peat patches sit on slopes too dry for effective rewetting.
+ 
+Tech: Python, GeoPandas, GDAL raster sampling, SciPy, QGIS Print Layout
+ 
+---
+ 
+### Cross-Project Comparison
+ 
+#### Methodological Progression
+ 
+```
+Cotswolds Permeability (v1→v2)    →  Foundation: resistance surface, least-cost path
+        ↓
+Cotswolds Suitability (3 scenarios) →  Deep: raster MCSA, scenario comparison
+        ↓
+BNG Connectivity (10 parks + AONB)  →  Bridge: AW buffer + PHI intersection, MCDA
+        ↓
+National Parks Suitability (P1)     →  Broad: vector geometry, 10 parks, 82K parcels
+        ↓
+Peatland Rewetting (P2)             →  Specialised: TWI hard filter, MRVBF, peatland
+```
+ 
+#### Scale vs Depth Trade-off
+ 
+| Dimension | Cotswolds (Projects 1–2) | National Parks (Projects 3–5) |
+|---|---|---|
+| Scale | Single AONB (2,041 km²) | 10 parks (~20,000 km²) |
+| Resolution | 50m raster (3M cells) | Vector geometry (actual habitat boundaries) |
+| Connectivity | Least-cost path (Dijkstra) | cKDTree proximity (nearest-neighbour) |
+| Scenarios | 3 policy scenarios | Single composite per project |
+| Parcels | 116–178 | 82,340 + 10,672 |
+| Hydrology | TWI as soft factor (15%) | TWI as hard filter + scoring (40%) |
+| Road handling | Raster buffer (30m) | Vector excision (exact geometry) |
+ 
+#### Key Convergent Findings
+ 
+1. No single criterion is sufficient. Cotswolds Scenario C (carbon-only) → 0 parcels. Peatland without TWI → 44% over-identification. Both projects independently prove multi-criteria integration is essential.
+ 
+2. Hydrology must be a hard constraint for peatland. The Cotswolds model treated TWI as a 15% weight (soft factor) — adequate for woodland where hydrology is one factor among many. The peatland model uses TWI as a binary filter — necessary because rewetting on dry slopes is physically impossible regardless of peat presence.
+ 
+3. Road impact is landscape-dependent. Road excision removes 0.2–2.0% of PHI patches — highest in lowland parks (South Downs 0.88%, New Forest 1.1%), lowest in upland parks (Lake District 0.31%). The Cotswolds model used 30m raster road buffers; the national model uses exact vector excision, which is more precise.
+ 
+4. Connectivity metrics enable cross-landscape comparison. Cotswolds: 82 connected components, 41 isolated nodes (v2). National parks: proximity mean ranges from 0.672 (Lake District) to 0.949 (The Broads). Both metrics reveal the same pattern: upland landscapes are more fragmented than lowland.
+
+ 
+## Significance
+ 
+### For Conservation Practice
+- **Multi-criteria models are non-negotiable** — both projects independently confirm single-criterion models fail or over-identify
+- **Hard filters > soft weights for physical constraints** — TWI as a filter (peatland) is more effective than TWI as a 15% weight (Cotswolds)
+- **Landscape type determines strategy** — upland parks need connectivity-focused restoration; lowland parks need infill within existing networks
+ 
+### For BNG & Carbon Markets
+- Peatland rewetting model directly supports BNG habitat credit identification with hydrological feasibility
+- 5-tier classification maps to phased investment: Tier 1 (core targets) → Tier 5 (low priority)
+- 10,672 peatland parcels across 5 parks provide a national-scale pipeline for rewetting investment
+
+ 
+## Data Sources
+ 
+| Dataset | Source | Used In |
+|---|---|---|
+| Priority Habitat Inventory (PHI) | Natural England | Projects 3, 4, 5 |
+| Ancient Woodland Inventory | Natural England | Projects 1, 2, 3 |
+| LCM2023 (10m classified) | UKCEH | Projects 1, 2 |
+| OS Open Roads | Ordnance Survey | All projects |
+| TWI raster (50m) | UK-wide | Projects 2, 4, 5 |
+| MRVBF raster (50m) | UK-wide | Project 5 |
+| Subsurface Drainage (50m) | UK-wide | Projects 2, 4 |
+| Natural Capital Pedotopes (50m) | UK-wide | Project 2 |
+| Geomorphons (50m) | UK-wide | Project 2 |
+| AONB / National Park boundaries | Natural England | All projects |
+| UKHab Classification v2.0 | UKHab | Project 3 |
+ 
+---
+ 
+## Technical Stack
+ 
+- **QGIS** — print layouts, cartographic export, visualisation
+- **Python 3.12** — all processing scripts
+- **GeoPandas / pyogrio** — vector I/O, geometry operations
+- **GDAL / osgeo** — raster I/O, sampling
+- **SciPy** — sparse graph (Dijkstra), cKDTree (proximity)
+- **NetworkX** — graph analysis, centrality
+- **NumPy** — array operations, raster computation
+- **Shapely** — geometric operations (buffer, intersection, explode)
+ 
 
 ## Hobby coding Projects
 
