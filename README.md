@@ -47,12 +47,10 @@ Iterative Node-Removal Sensitivity Analysis: Quantified catastrophic fragmentati
 I formulated a Resistance Ratio Metric ($\text{Cost Distance} / \text{Euclidean Distance}$) to identify inefficiency. Corridors with a ratio $> 2.0$ were flagged as high-friction pinch points where infrastructure forces circuitous movement. Restoration sites were ranked using an Ecological ROI Priority Score: $$\text{Priority} = \left(\frac{\text{Cost Distance}}{\text{Euclidean Distance}}\right) \times \left(\frac{1}{\text{Euclidean Distance}}\right)$$ This targets locations where interventions like hedgerow planting or woodland creation provide the maximum connectivity gain per pound spent.
 
 ### Key Features
-Statutory Ancient Woodland Core Anchoring: Prioritizes irreplaceable, ancient semi-natural habitats ($\ge 5\text{ ha}$) as permanent network nodes.
-Empirical Multi-Class Resistance Surface: Integrates UKCEH LCM2023 satellite-derived land cover with road network barrier hierarchies.
-Algorithmic Shortest Path Routing: Sparse Dijkstra implementation on a 2.76M-cell grid graph avoiding arbitrary straight-line assumptions.
-Graph-Theoretic Centrality & Resilience Modeling: Quantifies patch vulnerability and keystone connectors via NetworkX.
-Actionable BNG & Nature Recovery Spatial Targeting: Pinpoints 844 quantified restoration interventions based on ecological drag ratios.
-Fully Automated End-to-End Pipeline: CLI Python orchestration spanning data extraction, graph computation, spatial indexing, cartographic layout generation, and multi-format export.
+- Ancient Woodland Core Anchoring: Prioritizes irreplaceable habitats as the network's foundation.
+- Empirical Resistance Surface: Combines LCM2023 satellite data with road network hierarchies.
+- Algorithmic Routing: Uses sparse Dijkstra implementation on a 2.7M-cell grid, avoiding arbitrary assumptions.
+- Actionable BNG Targeting: Pinpoints 844 specific restoration sites based on quantified ecological drag.
 
 ### Further Considerations
 Topographic & Microclimatic Calibration: Incorporating high-resolution 1m/2m Environment Agency LiDAR DTM to evaluate slope impedance on steep Cotswolds escarpments.
