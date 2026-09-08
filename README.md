@@ -193,6 +193,7 @@ Question: Which areas across 10 National Parks offer the highest restoration sui
 <img width="400" height="282" alt="NORTHUMBERLAND_Restoration_Suitability" src="https://github.com/user-attachments/assets/44dca3a5-cfd2-4c8e-9338-4d0f84908ffa" />
 <img width="400" height="282" alt="THE BROADS_Restoration_Suitability" src="https://github.com/user-attachments/assets/99a62df1-3a4b-4356-9bae-2be2f95fb53b" />
 
+results zip folder ->https://drive.google.com/file/d/1Cz7MLQPhDsA7zsKNesXd6rWoj9YyqZQH/view?usp=drivesdk
  
 | National Park | Parcels | Proximity Mean | Processing Time |
 |---|---|---|---|
@@ -230,6 +231,7 @@ Question: Where is peatland rewetting hydrologically feasible across 5 National 
  <img width="400" height="282" alt="DARTMOOR_Peatland_Rewetting_Model" src="https://github.com/user-attachments/assets/2a5d0d8b-cff2-4773-a004-b84f841e369a" /> 
  <img width="400" height="282" alt="NORTH YORK MOORS_Peatland_Rewetting_Model" src="https://github.com/user-attachments/assets/326a4809-e993-4e42-8a45-24c5d4edfa75" />
 
+results zip folder -> https://drive.google.com/file/d/10Gf_Ouoe8ULJdytKRP1vXAu6q3NySeC9/view?usp=drivesdk
 
 Key finding: TWI filtering removes 44–56% of peat candidates in upland parks. The Broads retains 98.5% — expected for a lowland wetland landscape. Peak District retains only 43.9% — many peat patches sit on slopes too dry for effective rewetting.
  
