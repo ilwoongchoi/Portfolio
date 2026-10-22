@@ -1,7 +1,7 @@
 # Portfolio
 
 
-The portfolio is divided into three thirds at large, hobby project, research projects and GIS analysis projects. Links to all the output files can be found in this readme and other supporting files are in this github repository. If you want to see anything else please contact me and I would be more than happy to provide you with more references.
+The portfolio is divided into two parts at large, hobby projects and GIS analysis projects. Links to all the output files can be found in this readme and other supporting files are in this github repository. If you want to see anything else please contact me and I would be more than happy to provide you with more references.
 
 
 ## Cotswolds National Landscape Connectivity Opportunity Project
@@ -454,54 +454,6 @@ I am greatly interested in using algorithms and ai technology to create art, so 
 <img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/505e9bb0-a99e-4292-9167-0e6e3c7d2d7c" />
 <img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/7fa44045-db1b-4942-a4c8-d2ad9434659a" />
 <img width="123" height="130" alt="image" src="https://github.com/user-attachments/assets/08eb66d5-be84-4593-a98c-139858b3bcfe" />
-
-
-
-
-## Interdisciplinary_research
-
-
-
-As I mentioned in my cover letter, there is a gap period in my employment in 2026 uptil now, because during this time I did some researches that concerned topics such as biochemistry and physics. The motivation for this researched were greatly stemming from my personal motives and questions, and I developed an interdisciplinary mathematical models that map physical parameters to spatial/temporal coordinates and implemented continuous tims evolution using numerical ODE integration. These intensive nine months period resulted in my proficiency to use AI tools such as Claude Code to carry out python automation, mathematical modelling and data pipline construction. Below are some examples of the scripts and outputs of my research and modelling that I did during the research.
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/k_peak_std_heatmap.html <img width="400" height="200" alt="image" src="https://github.com/user-attachments/assets/893ac961-65df-40eb-b229-369434f0baff" />
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/k_ratio_mean_heatmap.html <img width="400" height="200" alt="image" src="https://github.com/user-attachments/assets/f008433b-7c55-45af-8e45-de555d99c37f" />
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/ocean_fluid_dynamics_standalone.html
-
-<img width="400" height="162" alt="image" src="https://github.com/user-attachments/assets/e82ba3f7-7d4b-467f-817e-b2b5498a932d" />
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_3d_interactive.html <img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/9e7331ca-f94d-43ef-b11c-02756f2c25af" />
-
-
-
-
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_physics_based.html
-<img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/029d4a31-b260-46d2-9549-330dd8cf2258" />
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/peatland_rule_based.html
-<img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/261a30c1-293d-45ac-a85b-ba5efa2f2ca3" />
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/simulation%26computations/planck_morphology_plotly.html <img width="400" height="297" alt="image" src="https://github.com/user-attachments/assets/01efd180-1e32-4c59-847b-e771d846e734" />
-
-<img width="400" height="357" alt="image" src="https://github.com/user-attachments/assets/503ab7d5-9753-4c33-b33e-2dc78d75d15d" /> <img width="400" height="385" alt="image" src="https://github.com/user-attachments/assets/f0b0f14a-7ea6-4267-803c-f4066c791ca4" /> <img width="400" height="264" alt="image" src="https://github.com/user-attachments/assets/a9879791-df51-4552-a242-89f3c39912c6" /><img width="400" height="208" alt="image" src="https://github.com/user-attachments/assets/692f7bd9-41a7-4e7d-b731-43ec94c15326" /><img width="400" height="293" alt="image" src="https://github.com/user-attachments/assets/7fdfd8c1-b8cb-47b1-9894-027d2a805579" /><img width="400" height="237" alt="image" src="https://github.com/user-attachments/assets/87284b71-f735-49d3-a684-a3c35d625291" /> <img width="400" height="108" alt="image" src="https://github.com/user-attachments/assets/c02b596a-d222-4e28-804f-f7fce2a99a6a" />
-
-
-## Music Composition Software
-
-During my research I made a music composition app that was supposed to help people in creating music. I included this in the portfolio to show that along with some of my other research files, these display my ability to design and make user interfaces and dashboards. As I have already mentioned in my cv, from very young age I was very keen in web design and web development was one of the first areas of programming that I began my coding hobby with.  I can make flawless web and user interface GUI, especially with the help of AI.
-
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/music_composition_software/composer.html
-https://raw.githack.com/ilwoongchoi/Portfolio/main/interdisciplinary_research/music_composition_software/composer2.html
-
-<img width="450" height="181" alt="image" src="https://github.com/user-attachments/assets/3eaf5d6a-1317-498f-b7b6-bfbe8d43e533" />
-<img width="450" height="205" alt="image" src="https://github.com/user-attachments/assets/424fb36d-6c85-4979-b630-844ee4d59ded" />
-
-
-
-
 
 
 
